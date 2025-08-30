@@ -2,7 +2,9 @@ package com.sid.gl.users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User,Long> {
-    User findByEmail(String email);
+import java.util.Optional;
 
+public interface UserRepository extends JpaRepository<User,Long> {
+    Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
 }
