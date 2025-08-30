@@ -18,7 +18,8 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
     protected LocalDateTime createdDate = LocalDateTime.now();
-    protected LocalDateTime updatedDate = LocalDateTime.now();
+    protected LocalDateTime updatedDate;
+
 
 
 }
