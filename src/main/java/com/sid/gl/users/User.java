@@ -1,6 +1,5 @@
 package com.sid.gl.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sid.gl.commons.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

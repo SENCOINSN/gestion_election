@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto register(UserRequestDto userRequest) throws UserAlreadyExistException {
         log.info("Registering User {}", userRequest);
         // done: verifier verification email s'il existe deja au niveau base de donnée
-          this.verifyEmailOtherway(userRequest.email());
+          this.verifyEmailAlreadyExist(userRequest.email());
 
         // todo map userDto => user
         User user = UserMapper.toUser(userRequest);
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService{
                 });
     }
 
-    private void verifyEmailOtherway(String email) throws UserAlreadyExistException {
+    private void verifyEmailAlreadyExist(String email) throws UserAlreadyExistException {
           Optional<User> user = userRepository.findByEmail(email);
           if(user.isPresent()){
               log.warn("User with email {} already exist", email);
