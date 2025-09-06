@@ -21,9 +21,7 @@ public class Bulletin extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
-    String partyName;
-    String parcours;*/
-        
+   */
     private rivate Long candidateId;
     private Long electionId;
     //private Long electionId;
