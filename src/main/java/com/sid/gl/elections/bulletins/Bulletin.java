@@ -15,18 +15,17 @@ import lombok.Setter;
 @Setter
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Bulletin extends BaseEntity {
-
-
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
     String partyName;
-    String parcours;
-
+    String parcours;*/
+        
+    private rivate Long candidateId;
+    private Long electionId;
     //private Long electionId;
 
 }
