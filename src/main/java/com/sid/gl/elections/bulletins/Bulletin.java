@@ -22,7 +22,7 @@ public class Bulletin extends BaseEntity {
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
    */
-    private rivate Long candidateId;
+    private Long candidateId;
     private Long electionId;
     //private Long electionId;
 
