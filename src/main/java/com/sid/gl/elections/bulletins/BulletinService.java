@@ -3,8 +3,8 @@ package com.sid.gl.elections.bulletins;
 import java.util.List;
 
 public interface BulletinService {
-    BulletinRequestDto createBulletin(String bulletinRequestDto) ;
-    BulletinRequestDto getBulletin(Long id);
-    List<BulletinRequestDto> getAllBulletin() ;
+    BulletinResponseDto createBulletin(BulletinRequestDto bulletinRequestDto) ;
+    BulletinResponseDto getBulletin(Long id);
+    List<BulletinResponseDto> getAllBulletin() ;
 
 }
