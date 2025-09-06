@@ -20,6 +20,7 @@ public class UserMapper {
     public static UserResponseDto toUserResponse(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
         //BeanUtils.copyProperties(user, userResponseDto);
+        userResponseDto.setId(user.getId());
         userResponseDto.setLastName(user.getLastName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setFirstName(user.getFirstName());

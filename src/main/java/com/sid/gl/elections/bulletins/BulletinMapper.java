@@ -1,9 +1,8 @@
-package com.sid.gl.elections;
+package com.sid.gl.elections.bulletins;
 
+import com.sid.gl.elections.Election;
 import com.sid.gl.users.User;
 import org.springframework.beans.BeanUtils;
-
-import java.util.Set;
 
 
 public class BulletinMapper {

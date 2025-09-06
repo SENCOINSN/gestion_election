@@ -1,7 +1,5 @@
-package com.sid.gl.elections;
+package com.sid.gl.elections.bulletins;
 
-import com.sid.gl.users.User;
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data

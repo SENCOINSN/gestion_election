@@ -1,4 +1,4 @@
-package com.sid.gl.elections;
+package com.sid.gl.elections.bulletins;
 
 
 import com.sid.gl.users.UserRepository;

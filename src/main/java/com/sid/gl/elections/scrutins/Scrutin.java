@@ -1,4 +1,4 @@
-package com.sid.gl.elections;
+package com.sid.gl.elections.scrutins;
 
 import com.sid.gl.commons.BaseEntity;
 import jakarta.persistence.*;

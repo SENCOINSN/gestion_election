@@ -29,5 +29,7 @@ public class User extends BaseEntity{
     private boolean enabled=false;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private UserState userState=UserState.ACTIVE;
 
 }

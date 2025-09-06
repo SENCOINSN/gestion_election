@@ -1,5 +1,6 @@
-package com.sid.gl.elections;
+package com.sid.gl.elections.bulletins;
 
+import com.sid.gl.elections.Election;
 import com.sid.gl.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

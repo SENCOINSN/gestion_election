@@ -6,14 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     //private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
@@ -26,12 +25,12 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto register(UserRequestDto userRequest) throws UserAlreadyExistException {
         log.info("Registering User {}", userRequest);
         // done: verifier verification email s'il existe deja au niveau base de donnée
-          this.verifyEmailAlreadyExist(userRequest.email());
+        this.verifyEmailAlreadyExist(userRequest.email());
 
         // todo map userDto => user
         User user = UserMapper.toUser(userRequest);
         //todo attribuer role user
-         attributeDefaultRole(user);
+        attributeDefaultRole(user);
 
         // todo save user
         User savedUser = userRepository.save(user);
@@ -42,6 +41,7 @@ public class UserServiceImpl implements UserService{
         return UserMapper.toUserResponse(savedUser);
     }
 
+    //role admin
     @Override
     public List<UserResponseDto> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -50,6 +50,8 @@ public class UserServiceImpl implements UserService{
                 .toList();
 
     }
+
+    //role admin
 
     @Override
     public UserResponseDto getUser(Long id) throws UserNotFoundException {
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService{
         return response;*/
     }
 
-    private void verifyEmail(String email)  {
+    private void verifyEmail(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
                     try {
@@ -78,11 +80,11 @@ public class UserServiceImpl implements UserService{
     }
 
     private void verifyEmailAlreadyExist(String email) throws UserAlreadyExistException {
-          Optional<User> user = userRepository.findByEmail(email);
-          if(user.isPresent()){
-              log.warn("User with email {} already exist", email);
-              throw new UserAlreadyExistException("User with email " + email + " already exist");
-          }
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            log.warn("User with email {} already exist", email);
+            throw new UserAlreadyExistException("User with email " + email + " already exist");
+        }
     }
 
     private void attributeDefaultRole(User user) {
