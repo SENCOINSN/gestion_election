@@ -2,6 +2,7 @@ package com.sid.gl.elections.bulletins;
 
 import com.sid.gl.elections.Election;
 import com.sid.gl.users.User;
+import com.sid.gl.users.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +10,9 @@ import org.springframework.stereotype.Component;
 public class BulletinMapper {
     private final UserRepository userRepository;
 
-    public BulletinMapper(BulletinRepository repository){
-        this.bulletinRepository= repository;
+    public BulletinMapper( UserRepository userRepository){
+        this.userRepository = userRepository;
+        //this.bulletinRepository= repository;
     }
 
 

@@ -24,7 +24,8 @@ public class UserMapper {
         userResponseDto.setLastName(user.getLastName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setFirstName(user.getFirstName());
-        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setUsername(user.getUsername() != null ? user.getUsername() : "Neant");
+        userResponseDto.setRoles(user.getRoles());
         return userResponseDto;
     }
 

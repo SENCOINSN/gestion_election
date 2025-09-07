@@ -21,8 +21,9 @@ public record UserRequestDto(
 
         @NotNull(message = "firstName must not be null")
         @NotBlank(message = "firstName is required")
-        @Size(min=12,max = 50,message = "firstName must be between 12 and 50 characters")
-        String firstName
+        @Size(min=4,max = 50,message = "firstName must be between 12 and 50 characters")
+        String firstName,
+        String username
 
 ) {
 

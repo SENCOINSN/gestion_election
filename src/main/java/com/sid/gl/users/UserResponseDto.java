@@ -1,6 +1,9 @@
 package com.sid.gl.users;
 
 import lombok.Data;
+
+import java.util.Set;
+
 @Data
 public class UserResponseDto {
     private Long id;
@@ -8,5 +11,6 @@ public class UserResponseDto {
     private String email;
     private String firstName;
     private String username;
+    private Set<Role> roles;
 
 }

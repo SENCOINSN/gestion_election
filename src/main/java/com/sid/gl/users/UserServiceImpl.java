@@ -1,19 +1,24 @@
 package com.sid.gl.users;
 
+import com.sid.gl.commons.DataResponse;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService{
     //private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
 
     private final UserRepository userRepository;
 
@@ -30,7 +35,7 @@ public class UserServiceImpl implements UserService {
         // todo map userDto => user
         User user = UserMapper.toUser(userRequest);
         //todo attribuer role user
-        attributeDefaultRole(user);
+        attributeDefaultRole(user,ROLE_NAME);
 
         // todo save user
         User savedUser = userRepository.save(user);
@@ -43,12 +48,27 @@ public class UserServiceImpl implements UserService {
 
     //role admin
     @Override
-    public List<UserResponseDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
+    public DataResponse getAllUsers(int page, int size) {
+        Page<User> users = userRepository.findAll(PageRequest.of(page, size));
+        return convertUserToDataResponse(users);
+    }
+
+    private DataResponse convertUserToDataResponse(Page<User> users){
+        List<User> userContents = users.getContent();
+        List<UserResponseDto> responses = userContents
+                .stream()
+                .filter(Objects::nonNull)
                 .map(UserMapper::toUserResponse)
                 .toList();
 
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setContent(responses);
+        dataResponse.setPageNo(users.getNumber());
+        dataResponse.setPageSize(users.getSize());
+        dataResponse.setTotalElements(users.getTotalElements());
+        dataResponse.setTotalPages(users.getTotalPages());
+        dataResponse.setLast(users.isLast());
+        return dataResponse;
     }
 
     //role admin
@@ -58,14 +78,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .map(UserMapper::toUserResponse)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
-
-        /*Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()){
-            throw new UserNotFoundException("User with id " + id + " not found");
-        }
-        User user1 = user.get();
-        UserResponseDto response = UserMapper.toUserResponse(user1);
-        return response;*/
     }
 
     private void verifyEmail(String email) {
@@ -87,16 +99,20 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void attributeDefaultRole(User user) {
-        /*roleRepository.findByRoleName(ROLE_NAME)
-                .map(role -> {
-                    user.getRoles().add(role);
-                    return role;
-                })
-                .orElseThrow(() -> new RuntimeException("Role not found"));*/
+    private void attributeDefaultRole(User user,String roleName) {
+        Role role;
+        Optional<Role> roleOption = roleRepository.findByRoleName(roleName);
+        if(roleOption.isEmpty()){
+            log.info("creation role niveau base de données");
+            Role roleToSave = new Role();
+            roleToSave.setRoleName(roleName);
+            role = roleRepository.save(roleToSave);
+            user.getRoles().add(role);
+        }else{
+            role = roleOption.get();
+            user.getRoles().add(role);
+        }
+        log.info("role attribué à l'utilisateur");
 
-        Role role = roleRepository.findByRoleName(ROLE_NAME)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-        user.getRoles().add(role);
     }
 }
