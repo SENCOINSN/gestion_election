@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface BulletinRepository extends JpaRepository<Bulletin, Long> {
     Optional<Bulletin> findBulletinById(Long id);
     //boolean existsByUserAndElection (User user, Election election);
+    boolean existsByCandidateIdAndElectionId(Long candidateId, Long electionId);
 
 
 }

@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-//@Table(name = "tb_bulletin")
 @Table(name = "tr_bulletin",
         indexes = {@Index(name = "idx_candidat_election", columnList="candidate_id, election_id", unique = true)})
 @Getter
@@ -22,8 +21,10 @@ public class Bulletin extends BaseEntity {
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
    */
+    @Column(nullable = false)
     private Long candidateId;
+    @Column(nullable = false)
     private Long electionId;
-    //private Long electionId;
+
 
 }

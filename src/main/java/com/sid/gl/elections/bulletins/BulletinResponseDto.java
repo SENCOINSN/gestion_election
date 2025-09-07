@@ -1,6 +1,8 @@
 package com.sid.gl.elections.bulletins;
 
-import java.time.LocalDateTime;
+import com.sid.gl.elections.ElectionResponseDto;
+import com.sid.gl.users.UserResponseDto;
+
 
 public record BulletinResponseDto (
         UserResponseDto candidat,

@@ -1,7 +1,7 @@
 package com.sid.gl.elections;
 
 import com.sid.gl.elections.bulletins.BulletinRepository;
-import com.sid.gl.exceptions.ElectionAlreadyExist;
+import com.sid.gl.exceptions.ElectionAlreadyExistException;
 import com.sid.gl.exceptions.ElectionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +22,11 @@ public class ElectionServiceImpl implements ElectionService {
 
     //role admin
     @Override
-    public ElectionResponseDto createElection(ElectionRequestDto request) throws ElectionAlreadyExist {
+    public ElectionResponseDto createElection(ElectionRequestDto request) throws ElectionAlreadyExistException {
         Optional<Election> electionVerify = electionRepository.findByName(request.name());
         if(electionVerify.isPresent()){
             log.error("Election with name {} already exist", request.name());
-            throw new ElectionAlreadyExist("Election with name " + request.name() + " already exist");
+            throw new ElectionAlreadyExistException("Election with name " + request.name() + " already exist");
         }
         Election election = ElectionMapper.toElection(request);
         log.info("Election mapped {} ", election);
