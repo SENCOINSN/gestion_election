@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = ApiConstants.BASE_PATH+"/electeur")
+@RequestMapping(value = ApiConstants.BASE_PATH+"/election")
 
 public class ElectionController extends AbstractController {
     private final ElectionService electionService;
@@ -34,9 +34,10 @@ public class ElectionController extends AbstractController {
     @Operation(summary = "Recuperation la list des elections")
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllElection(
-            @RequestParam( name = "page", defaultValue = ApiConstants.SIZE)int page,
+            @RequestParam( name = "page", defaultValue = ApiConstants.PAGE)int page,
+            @RequestParam( name = "size", defaultValue = ApiConstants.SIZE)int size
     ){
-        return getResponseEntity(electionService.getAllElections());
+        return getResponseEntity(electionService.getAllElections(page,size));
     }
     @Operation(summary = "Recuperation d'un election depuis l'id")
     @GetMapping("get/{id}")
