@@ -2,22 +2,32 @@ package com.sid.gl.elections.bulletins;
 
 import com.sid.gl.elections.Election;
 import com.sid.gl.users.User;
-import com.sid.gl.users.UserRepository;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
 
-@Component
+
 public class BulletinMapper {
-    private final UserRepository userRepository;
 
-    public BulletinMapper( UserRepository userRepository){
-        this.userRepository = userRepository;
-        //this.bulletinRepository= repository;
+
+    private BulletinMapper () {
     }
 
+    //Conversion BulletinRequestDto => bulletin
+    public static Bulletin toBulletin(BulletinRequestDto bulletinRequestDto) {
+        Bulletin bulletin = new Bulletin();
+        BeanUtils.copyProperties(bulletinRequestDto, bulletin);
+        return bulletin;
+    }
+    //Conversion  Bulletin => BulletinRequestDto
+    public static BulletinRequestDto toBulletinRequestDto( Bulletin bulletin) {
+        return null;
+    }
+    // Conversion BulletinResponseDto => Bulletin
+    public static Bulletin bulletinResponseOtherWay( BulletinResponseDto bulletinResponseDto)  {
+        Bulletin bulletin = new Bulletin();
+        BeanUtils.copyProperties(bulletinResponseDto, bulletin);
+        return bulletin;
+    }
 
-
-    
-    
+    //Conversion
 }
 

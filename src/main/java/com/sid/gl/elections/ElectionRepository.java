@@ -1,5 +1,7 @@
 package com.sid.gl.elections;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,7 +18,12 @@ public interface ElectionRepository extends JpaRepository<Election, Long> {
     List<Election> findByActiveTrue();  // select * from election where active = true
 
     @Query("select e from Election e where e.active = true")
-    List<ElectionInfoProjection> getElectionIsActive();  // select id, name, start_date from election where active = true
+    List<ElectionInfoProjection> getElectionIsActive();
+
+    @Override
+    Page<Election> getA(Pageable pageable);
+
+    // select id, name, start_date from election where active = true
 
 
 }

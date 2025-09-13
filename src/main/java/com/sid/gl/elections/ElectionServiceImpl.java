@@ -1,10 +1,13 @@
 package com.sid.gl.elections;
 
+import com.sid.gl.commons.DataResponse;
 import com.sid.gl.elections.bulletins.BulletinRepository;
 import com.sid.gl.exceptions.ElectionAlreadyExistException;
 import com.sid.gl.exceptions.ElectionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,8 +49,9 @@ public class ElectionServiceImpl implements ElectionService {
 
     //role admin
     @Override
-    public List<ElectionResponseDto> getAllElections() {
-        List<Election> elections = electionRepository.findAll();
+    public List <DataResponse> getAllElections(int page, int size) {
+        Page <Election> pageable = electionRepository.findAll(PageRequest.of(page, size));
+
         return elections
                 .stream()
                 .filter(Objects::nonNull)
@@ -63,6 +67,7 @@ public class ElectionServiceImpl implements ElectionService {
                 .filter(Objects::nonNull)
                 .map(ElectionMapper::fromElectionProjection)
                 .toList();
+
     }
 
 

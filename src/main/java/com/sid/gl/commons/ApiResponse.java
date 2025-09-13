@@ -13,6 +13,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Data
+
 public class ApiResponse<T> {
     private Status status;
     private List<ErrorDTO> errorDTOS;

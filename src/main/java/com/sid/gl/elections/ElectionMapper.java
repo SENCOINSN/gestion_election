@@ -6,9 +6,11 @@ import java.time.LocalDateTime;
 public class ElectionMapper {
 
     private ElectionMapper(){}
-
+            // Conversion Election to ElectionResponseDto on fait le mapping depuis le constructeur
+            // vu que un RECORD n'as pas getter ni de setter
     public static ElectionResponseDto toElectionResponseDto( Election election){
         return new ElectionResponseDto(
+                election.getId(),
                 election.getName(),
                 election.getDescription(),
                 election.getStartDate()
@@ -30,6 +32,7 @@ public class ElectionMapper {
     //todo converion electionInfoProjection => electionResponseDto
     public static ElectionResponseDto fromElectionProjection(ElectionInfoProjection electionInfoProjection) {
         return new ElectionResponseDto(
+                electionInfoProjection.getId(),
                 electionInfoProjection.getName(),
                 electionInfoProjection.getDescription(),
                 electionInfoProjection.getStartDate()

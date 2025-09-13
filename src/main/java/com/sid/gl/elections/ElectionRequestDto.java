@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
+
+
+// Request recuperer depuis la base de données pour l'affiche sur le front,
 public record ElectionRequestDto(
         @NotBlank(message = "name is required")
                 @NotNull(message = "name must not be null")

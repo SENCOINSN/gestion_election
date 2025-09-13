@@ -14,23 +14,23 @@ public class BulletinServiceImpl implements BulletinService {
 
     private final BulletinRepository bulletinRepository;
     private final UserRepository userRepository;
-    private final static String ROLE_NAME = "CANDIDAT";
+    private final static String ROLE_NAME = "CANDIDATE";
 
 
 
     @Override
-    public BulletinResponseDto createBulletin (BulletinRequestDto bulletinRequestDto) {
+    public BulletinRequestDto createBulletin (BulletinRequestDto bulletinRequestDto) {
       return null;
     }
 
 
     @Override
-    public BulletinResponseDto getBulletin(Long id) {
+    public BulletinRequestDto getBulletin(Long id) {
         return null;
     }
 
     @Override
-    public List<BulletinResponseDto> getAllBulletin() {
+    public List<BulletinRequestDto> getAllBulletin() {
         return List.of();
     }
 }
