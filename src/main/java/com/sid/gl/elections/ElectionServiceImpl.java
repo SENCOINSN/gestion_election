@@ -49,14 +49,16 @@ public class ElectionServiceImpl implements ElectionService {
 
     //role admin
     @Override
-    public List <DataResponse> getAllElections(int page, int size) {
-        Page <Election> pageable = electionRepository.findAll(PageRequest.of(page, size));
+    public DataResponse getAllElections(int page, int size) {
+        Page <Election> pageElections = electionRepository.findAll(PageRequest.of(page, size));
+       List<Election> elections = pageElections.getContent();
 
-        return elections
+       /* return elections
                 .stream()
                 .filter(Objects::nonNull)
                 .map(ElectionMapper::toElectionResponseDto)
-                .toList();
+                .toList();*/
+        return null;
     }
 
     @Override
