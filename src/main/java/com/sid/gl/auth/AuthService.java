@@ -42,7 +42,7 @@ public class AuthService {
         UserResponseDto responseDto = UserMapper.toUserResponse(user);
 
         return JwtResponseDto.builder()
-                .token(token)
+                .accessToken(token)
                 .user(responseDto)
                 .build();
 
