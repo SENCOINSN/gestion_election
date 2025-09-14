@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     //private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final UserRepository userRepository;
 
@@ -34,6 +38,9 @@ public class UserServiceImpl implements UserService{
 
         // todo map userDto => user
         User user = UserMapper.toUser(userRequest);
+        // hash du mot de passe
+        String passwordHash = bCryptPasswordEncoder.encode(userRequest.password());
+        user.setPassword(passwordHash);
         //todo attribuer role user
         attributeDefaultRole(user,ROLE_NAME);
 

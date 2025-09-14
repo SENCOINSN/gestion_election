@@ -1,8 +1,7 @@
 package com.sid.gl.security;
 
 import com.sid.gl.users.User;
-import com.sid.gl.users.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

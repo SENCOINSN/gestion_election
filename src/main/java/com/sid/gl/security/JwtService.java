@@ -10,14 +10,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
 
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class JwtService {
 
     @Value("${jwt.secret}")
@@ -67,10 +69,9 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUserName(token);
-        Optional <User> optionalUser = userRepository.findByUsernameOrEmail(username,username);
-        return optionalUser.isPresent() && !isTokenExpired(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
 
