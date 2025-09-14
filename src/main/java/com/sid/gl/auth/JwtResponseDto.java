@@ -5,6 +5,6 @@ import lombok.Builder;
 
 @Builder
 public class JwtResponseDto {
-    private String token;
+    private String accessToken;
     private UserResponseDto user;
 }
