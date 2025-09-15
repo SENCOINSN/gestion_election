@@ -9,6 +9,6 @@ import java.util.List;
 public interface ElectionService {
     ElectionResponseDto createElection (ElectionRequestDto election) throws ElectionAlreadyExistException;
     ElectionResponseDto getElection(Long id) throws ElectionNotFoundException;
-    List <DataResponse> getAllElections(int page, int size);
+    DataResponse getAllElections(int page, int size);
     List<ElectionResponseDto> getElectionIsActive();
 }

@@ -20,8 +20,6 @@ public interface ElectionRepository extends JpaRepository<Election, Long> {
     @Query("select e from Election e where e.active = true")
     List<ElectionInfoProjection> getElectionIsActive();
 
-    @Override
-    Page<Election> getA(Pageable pageable);
 
     // select id, name, start_date from election where active = true
 
