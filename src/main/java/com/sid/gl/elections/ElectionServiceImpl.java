@@ -4,12 +4,14 @@ import com.sid.gl.commons.DataResponse;
 import com.sid.gl.elections.bulletins.BulletinRepository;
 import com.sid.gl.exceptions.ElectionAlreadyExistException;
 import com.sid.gl.exceptions.ElectionNotFoundException;
+import com.sid.gl.utils.ElectionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -51,14 +53,10 @@ public class ElectionServiceImpl implements ElectionService {
     @Override
     public DataResponse getAllElections(int page, int size) {
         Page <Election> pageElections = electionRepository.findAll(PageRequest.of(page, size));
-       List<Election> elections = pageElections.getContent();
+        List<Election> elections = pageElections.getContent();
+        List<ElectionResponseDto> electionResponseDtos = ElectionMapper.toListElectionResponseDto(elections);
 
-       /* return elections
-                .stream()
-                .filter(Objects::nonNull)
-                .map(ElectionMapper::toElectionResponseDto)
-                .toList();*/
-        return null;
+        return ElectionUtils.buildDataResponse(electionResponseDtos, pageElections);
     }
 
     @Override

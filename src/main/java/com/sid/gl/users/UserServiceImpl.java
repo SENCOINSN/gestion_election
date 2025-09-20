@@ -3,6 +3,7 @@ package com.sid.gl.users;
 import com.sid.gl.commons.DataResponse;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
+import com.sid.gl.utils.ElectionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -67,15 +68,7 @@ public class UserServiceImpl implements UserService{
                 .filter(Objects::nonNull)
                 .map(UserMapper::toUserResponse)
                 .toList();
-
-        DataResponse dataResponse = new DataResponse();
-        dataResponse.setContent(responses);
-        dataResponse.setPageNo(users.getNumber());
-        dataResponse.setPageSize(users.getSize());
-        dataResponse.setTotalElements(users.getTotalElements());
-        dataResponse.setTotalPages(users.getTotalPages());
-        dataResponse.setLast(users.isLast());
-        return dataResponse;
+        return ElectionUtils.buildDataResponse(responses, users);
     }
 
     //role admin

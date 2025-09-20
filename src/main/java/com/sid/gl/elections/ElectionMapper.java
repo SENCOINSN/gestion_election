@@ -1,6 +1,8 @@
 package com.sid.gl.elections;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 
 public class ElectionMapper {
@@ -15,6 +17,13 @@ public class ElectionMapper {
                 election.getDescription(),
                 election.getStartDate()
         );
+    }
+
+    public static List<ElectionResponseDto> toListElectionResponseDto(List<Election> elections){
+        if(!elections.isEmpty()){
+            return elections.stream().map(ElectionMapper::toElectionResponseDto).toList();
+        }
+        return Collections.emptyList();
     }
 
     //todo conversion electionRequestDto => election
