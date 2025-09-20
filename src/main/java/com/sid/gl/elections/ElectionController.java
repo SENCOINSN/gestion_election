@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,8 @@ public class ElectionController extends AbstractController {
     }
 
     @Operation(summary = "creation d'un election")
-    @PostMapping( "/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping( "/create") //todo admin can create election
     public ResponseEntity<ApiResponse> createElection(@RequestBody @Valid ElectionRequestDto request) throws ElectionAlreadyExistException {
         return getResponseEntity(electionService.createElection(request));
     }

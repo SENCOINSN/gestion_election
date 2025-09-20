@@ -9,6 +9,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JwtService {
 
     @Value("${jwt.secret}")
@@ -39,16 +41,17 @@ public class JwtService {
         if(user !=null){
             claims.put("subject",username);
             claims.put("roles",user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()));
-            return createToken(claims);
+            return createToken(claims,username);
         }
         return null;
     }
 
-    private String createToken(Map<String,Object> claims){
+    private String createToken(Map<String,Object> claims,String username){
         return Jwts.builder()
                 .setClaims(claims)
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + (15 * 60 * 1000))) // 15 minutes
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
@@ -58,7 +61,9 @@ public class JwtService {
     }
 
     public String extractUserName(String token){
-        return extractClaim(token,Claims::getSubject);
+        String username = extractClaim(token,Claims::getSubject);
+        log.info("Username: {}", username);
+        return username;
     }
 
     public Date extractExpiration(String token){

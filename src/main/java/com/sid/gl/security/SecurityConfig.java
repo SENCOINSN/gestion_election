@@ -67,6 +67,7 @@ private final JwtAuthFilter jwtAuthFilter;
                .authorizeHttpRequests(req ->
                        req
                                .requestMatchers(PUBLIC_URLS).permitAll()
+                               //.requestMatchers("/api/v1/users/all").hasRole("ADMIN")
                                .anyRequest()
                                .authenticated()
                )

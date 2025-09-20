@@ -16,7 +16,11 @@ public class UserCustomDetails extends User implements UserDetails {
     public UserCustomDetails(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
-        this.authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).toList();
+        this.authorities = user.getRoles().
+                stream().
+                map(role ->
+                        new SimpleGrantedAuthority("ROLE_"+role.getRoleName()
+                                .toUpperCase())).toList(); //principe nomenclature récupération des roles utilisateur sur le SimpleGrantAuthority
     }
 
     @Override

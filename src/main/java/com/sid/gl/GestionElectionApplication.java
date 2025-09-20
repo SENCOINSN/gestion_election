@@ -2,6 +2,8 @@ package com.sid.gl;
 
 import com.sid.gl.users.Role;
 import com.sid.gl.users.RoleRepository;
+import com.sid.gl.users.User;
+import com.sid.gl.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,11 +12,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class GestionElectionApplication implements CommandLineRunner {
 	@Autowired
    private RoleRepository roleRepository;
+	@Autowired
+	private UserRepository userRepository;
 	public static void main(String[] args) {
 		SpringApplication.run(GestionElectionApplication.class, args);
 	}
@@ -37,6 +42,18 @@ public class GestionElectionApplication implements CommandLineRunner {
 				roleRepository.save(role);
 			}
 		});
+
+		//todo create admin user
+		if(!userRepository.existsByUsername("admin")){
+			User user = new User();
+			user.setFirstName("pape");
+			user.setLastName("Seye");
+			user.setEmail("admin@gmail.com");
+			user.setUsername("admin");
+			user.setPassword(bCryptPasswordEncoder().encode("PapeDemba123@"));
+			user.setRoles(Set.of(roleRepository.findByRoleName("ADMIN").get()));
+			userRepository.save(user);
+		}
 
 
 

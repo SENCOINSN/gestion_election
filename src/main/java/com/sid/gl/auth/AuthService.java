@@ -37,6 +37,7 @@ public class AuthService {
            log.info("User is authenticated !!");
            UserCustomDetails userDetails = (UserCustomDetails) authentication.getPrincipal();
            String token = jwtService.generateToken(userDetails.getUsername());
+           log.info("Token generated: {}", token);
         User user =  userRepository.findByUsernameOrEmail(userDetails.getUsername(), userDetails.getUsername())
                    .stream().findFirst().orElse(null);
         UserResponseDto responseDto = UserMapper.toUserResponse(user);
