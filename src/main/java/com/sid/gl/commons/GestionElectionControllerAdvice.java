@@ -6,6 +6,7 @@ import com.sid.gl.exceptions.ElectionNotFoundException;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -64,6 +65,16 @@ public class GestionElectionControllerAdvice {
     @ExceptionHandler(ElectionNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiResponse<?> handleServiceException(ElectionNotFoundException exception){
+        ApiResponse<?> response = new ApiResponse<>();
+        response.setErrorDTOS(Collections.singletonList(new ErrorDTO("", exception.getMessage())));
+        response.setStatus(Status.ERROR);
+        return response;
+    }
+
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse<?> handleServiceException(BadCredentialsException exception){
         ApiResponse<?> response = new ApiResponse<>();
         response.setErrorDTOS(Collections.singletonList(new ErrorDTO("", exception.getMessage())));
         response.setStatus(Status.ERROR);

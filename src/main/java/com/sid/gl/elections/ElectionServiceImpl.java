@@ -50,26 +50,17 @@ public class ElectionServiceImpl implements ElectionService {
     //role admin
     @Override
     public DataResponse getAllElections(int page, int size) {
-        Page <Election> election = electionRepository.findAll(PageRequest.of(page, size));
-        return converElectionToDataresponse(election);
-    }
-    private DataResponse converElectionToDataresponse(Page<Election> elections) {
-        List<Election> elecContent = elections.getContent();
-        List<ElectionResponseDto> responses = elecContent
+        Page <Election> pageElections = electionRepository.findAll(PageRequest.of(page, size));
+       List<Election> elections = pageElections.getContent();
+
+       /* return elections
                 .stream()
                 .filter(Objects::nonNull)
                 .map(ElectionMapper::toElectionResponseDto)
-                .toList();
-        DataResponse data = new DataResponse();
-        data.setContent(responses);
-        data.setPageNo(elections.getNumber());
-        data.setPageSize(elections.getSize());
-        data.setTotalElements(elections.getTotalElements());
-        data.setTotalPages(elections.getTotalPages());
-        data.setLast(elections.isLast());
-        return data;
-
+                .toList();*/
+        return null;
     }
+
     @Override
     public List<ElectionResponseDto> getElectionIsActive() {
         List<ElectionInfoProjection> electionInfoProjections = electionRepository.getElectionIsActive();

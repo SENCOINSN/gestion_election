@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,13 +29,17 @@ public class UserController extends AbstractController {
         return getResponseEntity(userService.register(request));
     }
 
+
     @Operation(summary = "recuperation la liste des utilisateurs")
-    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/all")  // admin
     public ResponseEntity<ApiResponse> getAllUsers(
         @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
 
         @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size
     ) {
+        String principal = getCurrentUserConnected();
+        log.info("User connected: {}",principal);
         return getResponseEntity(userService.getAllUsers(page,size));
     }
 

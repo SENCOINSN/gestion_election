@@ -7,7 +7,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
+import lombok.ToString;
 
 
 @Entity
@@ -15,6 +15,7 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @Setter
+@ToString
 public class Role extends BaseEntity {
    private String roleName;
    private String description;

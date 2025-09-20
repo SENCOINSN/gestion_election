@@ -11,8 +11,8 @@ public class UserMapper {
         User user = new User();
         user.setLastName(userRequestDto.lastName());
         user.setEmail(userRequestDto.email());
-        user.setPassword(userRequestDto.password()); // todo password encoder
         user.setFirstName(userRequestDto.firstName());
+        user.setUsername(userRequestDto.username());
         return user;
     }
 
