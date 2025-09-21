@@ -3,6 +3,7 @@ package com.sid.gl.users;
 import com.sid.gl.commons.AbstractController;
 import com.sid.gl.commons.ApiConstants;
 import com.sid.gl.commons.ApiResponse;
+import com.sid.gl.exceptions.RoleNotFoundException;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,6 +50,17 @@ public class UserController extends AbstractController {
             @Parameter(name = "id",required = true)
             @PathVariable Long id) throws UserNotFoundException {
         return getResponseEntity(userService.getUser(id));
+    }
+
+    //ajouter de api-addRole
+    @Operation(summary = "Ajout d'un role a un utilisateur")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/addRole/{id}")
+    public ResponseEntity<ApiResponse> addRole(
+            @Parameter(name = "id",required = true)
+            @PathVariable Long id,
+            @RequestBody @Valid RoleRequestDto request) throws UserNotFoundException, RoleNotFoundException {
+        return getResponseEntity(userService.addRole(id,request));
     }
 
 }
