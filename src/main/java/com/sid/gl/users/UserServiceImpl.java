@@ -1,6 +1,7 @@
 package com.sid.gl.users;
 
 import com.sid.gl.commons.DataResponse;
+import com.sid.gl.exceptions.RoleNotFoundException;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
 import com.sid.gl.utils.ElectionUtils;
@@ -91,6 +92,8 @@ public class UserServiceImpl implements UserService{
                 });
     }
 
+
+
     private void verifyEmailAlreadyExist(String email) throws UserAlreadyExistException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
@@ -99,7 +102,16 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    private void attributeDefaultRole(User user,String roleName) {
+    @Override
+    public UserResponseDto addRole(Long id, RoleRequestDto role) throws UserNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+        attributeDefaultRole(user,role.roleName());
+        User savedUser = userRepository.save(user);
+    return UserMapper.toUserResponse(savedUser);
+    }
+
+    private void attributeDefaultRole(User user, String roleName) {
         Role role;
         Optional<Role> roleOption = roleRepository.findByRoleName(roleName);
         if(roleOption.isEmpty()){
@@ -115,4 +127,5 @@ public class UserServiceImpl implements UserService{
         log.info("role attribué à l'utilisateur");
 
     }
+
 }
