@@ -27,11 +27,12 @@ public class ElectionController extends AbstractController {
     }
 
     @Operation(summary = "creation d'un election")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SUPERVISOR')")
     @PostMapping( "/create") //todo admin can create election
     public ResponseEntity<ApiResponse> createElection(@RequestBody @Valid ElectionRequestDto request) throws ElectionAlreadyExistException {
         return getResponseEntity(electionService.createElection(request));
     }
+
 
     @Operation(summary = "Recuperation la list des elections")
     @GetMapping("/all")
