@@ -1,7 +1,9 @@
 package com.sid.gl.elections;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -15,7 +17,8 @@ public class ElectionMapper {
                 election.getId(),
                 election.getName(),
                 election.getDescription(),
-                election.getStartDate()
+                election.getStartDate(),
+                election.getEndDate()
         );
     }
 
@@ -32,8 +35,11 @@ public class ElectionMapper {
         Election election = new Election();
         election.setName(electionRequestDto.name());
         election.setDescription(electionRequestDto.description());
-        election.setStartDate(electionRequestDto.startDate());
-        LocalDateTime endDate = electionRequestDto.startDate().plusHours(electionRequestDto.duration());
+        //convert date to localdatetime
+        Date date = electionRequestDto.startDate();
+        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        election.setStartDate(localDateTime);
+        LocalDateTime endDate = localDateTime.plusHours(electionRequestDto.duration());
         election.setEndDate(endDate);
         return election;
     }
@@ -44,7 +50,8 @@ public class ElectionMapper {
                 electionInfoProjection.getId(),
                 electionInfoProjection.getName(),
                 electionInfoProjection.getDescription(),
-                electionInfoProjection.getStartDate()
+                electionInfoProjection.getStartDate(),
+                electionInfoProjection.getEndDate()
         );
     }
 }

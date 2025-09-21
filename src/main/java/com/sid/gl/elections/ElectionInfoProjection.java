@@ -14,4 +14,5 @@ public interface ElectionInfoProjection {
 
     boolean isActive();
     String getDescription();
+    LocalDateTime getEndDate();
 }

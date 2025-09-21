@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
-
+import java.util.Date;
 
 
 // Request recuperer depuis la base de données pour l'affiche sur le front,
@@ -14,8 +14,8 @@ public record ElectionRequestDto(
                 @NotNull(message = "name must not be null")
         String name,
         String description,
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
-        LocalDateTime startDate,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+        Date startDate,
         Long duration
 ) {
 }
