@@ -37,13 +37,15 @@ public class JwtService {
 
     public String generateToken(String username){
         Map<String,Object> claims = new HashMap<>();
-        User user = userRepository.findByUsernameOrEmail(username,username).get();
-        if(user !=null){
-            claims.put("subject",username);
-            claims.put("roles",user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()));
-            return createToken(claims,username);
-        }
-        return null;
+        return userRepository.findByUsernameOrEmail(username, username)
+                .map(user -> {
+                    claims.put("subject", username);
+                    claims.put("roles", user.getRoles().stream()
+                            .map(Role::getRoleName)
+                            .collect(Collectors.toSet()));
+                    return createToken(claims, username);
+                })
+                .orElse(null);
     }
 
     private String createToken(Map<String,Object> claims,String username){

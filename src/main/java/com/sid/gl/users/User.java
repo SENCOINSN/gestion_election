@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "tb_users")
@@ -34,4 +36,9 @@ public class User extends BaseEntity{
     @Embedded
     private PartyName partyName;
 
-}
+    @ElementCollection
+    @CollectionTable(name="user_elections_voted", joinColumns = @JoinColumn(name = "electeur_id"))
+    @Column(name = "elections_voted")
+    private List<String> elections_voted=new ArrayList<>();
+
+}  

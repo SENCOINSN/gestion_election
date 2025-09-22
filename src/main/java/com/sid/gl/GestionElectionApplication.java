@@ -78,7 +78,7 @@ public class GestionElectionApplication implements CommandLineRunner {
 		//done : implementation du process souscription candidat (supervisor) (creation du bulletin du candidat)
 		// todo upload une image d'un candidat
 		// todo un cron qui va déclencher l'ouverture d'une election à la date venue à chaque 9h
-		//  process envoi mail de notification aux électeurs de la plateforme
+		//todo  process envoi mail de notification aux électeurs de la plateforme
 
 
 
