@@ -1,6 +1,6 @@
 package com.sid.gl.security;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import  com.fasterxml.jackson.core.type.TypeReference;
 import com.sid.gl.users.Role;
 import com.sid.gl.users.User;
 import com.sid.gl.users.UserRepository;

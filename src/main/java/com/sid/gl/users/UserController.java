@@ -62,5 +62,15 @@ public class UserController extends AbstractController {
             @RequestBody @Valid RoleRequestDto request) throws UserNotFoundException, RoleNotFoundException {
         return getResponseEntity(userService.addRole(id,request));
     }
+    // suppression un role par l'admin
 
+    @Operation(summary = "Suppression d'un role a un utilisateur")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/deleteRole/{id}")
+    public ResponseEntity<ApiResponse> deleteRoleUser(
+            @Parameter(name = "id",required = true)
+            @PathVariable Long id,
+            @RequestBody @Valid RoleRequestDto request) throws UserNotFoundException {
+        return getResponseEntity(userService.deleteRoleUser(id,request));
+    }
 }
