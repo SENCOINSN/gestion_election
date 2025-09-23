@@ -83,7 +83,6 @@ private final JwtAuthFilter jwtAuthFilter;
         authenticationProvider.setUserDetailsService(userDetailsService(userRepository));
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
-
     }
 
     @Bean

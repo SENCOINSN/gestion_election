@@ -79,7 +79,7 @@ public class BulletinServiceImpl implements BulletinService {
         //todo map bulletin => bulletinResponseDto
         UserResponseDto candidat = UserMapper.toUserResponse(user);
         ElectionResponseDto electionResponseDto = ElectionMapper.toElectionResponseDto(election);
-        return new BulletinResponseDto(candidat, electionResponseDto);
+        return new BulletinResponseDto(bulletin.getId(), candidat, electionResponseDto);
     }
 
     private void createRoleCandidatIfNotExists(User user, String roleName){
@@ -112,7 +112,7 @@ public class BulletinServiceImpl implements BulletinService {
         if(optUser.isPresent() && optElection.isPresent()){
             user = optUser.get();
             election = optElection.get();
-            return new BulletinResponseDto(UserMapper.toUserResponse(user),
+            return new BulletinResponseDto(bulletin.getId(),UserMapper.toUserResponse(user),
                     ElectionMapper.toElectionResponseDto(election));
         }
 

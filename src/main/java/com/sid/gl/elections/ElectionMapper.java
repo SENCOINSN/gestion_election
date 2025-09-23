@@ -18,7 +18,8 @@ public class ElectionMapper {
                 election.getName(),
                 election.getDescription(),
                 election.getStartDate(),
-                election.getEndDate()
+                election.getEndDate(),
+                election.isActive()
         );
     }
 
@@ -37,8 +38,10 @@ public class ElectionMapper {
         election.setDescription(electionRequestDto.description());
         //convert date to localdatetime
         Date date = electionRequestDto.startDate();
+        //todo review this after for handle endDate if increase 7h for the duration  endDate
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        election.setStartDate(localDateTime);
+
+        election.setStartDate(electionRequestDto.startDate());
         LocalDateTime endDate = localDateTime.plusHours(electionRequestDto.duration());
         election.setEndDate(endDate);
         return election;
@@ -46,12 +49,14 @@ public class ElectionMapper {
 
     //todo converion electionInfoProjection => electionResponseDto
     public static ElectionResponseDto fromElectionProjection(ElectionInfoProjection electionInfoProjection) {
+        //todo handle here to custom date format localdatetime
         return new ElectionResponseDto(
                 electionInfoProjection.getId(),
                 electionInfoProjection.getName(),
                 electionInfoProjection.getDescription(),
                 electionInfoProjection.getStartDate(),
-                electionInfoProjection.getEndDate()
+                electionInfoProjection.getEndDate(),
+                electionInfoProjection.isActive()
         );
     }
 }

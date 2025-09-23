@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Entity
@@ -18,7 +19,8 @@ public class Election extends BaseEntity {
     @Column(unique = true, nullable = false) //index uniq not null
     private String name;
     private String description;
-    private LocalDateTime startDate;
+    @Temporal(TemporalType.DATE)
+    private Date startDate;
     private LocalDateTime endDate;
     private boolean active=false;
 }
