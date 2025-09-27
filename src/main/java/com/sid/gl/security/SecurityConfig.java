@@ -42,7 +42,9 @@ private final JwtAuthFilter jwtAuthFilter;
             "/swagger-ui/favicon-16x16.png",
             "/static/**",
             "/resources/**",
-            "/images/**"
+            "/images/**",
+            "/api/v1/users/filejpg/**",
+            "/api/v1/users/filepng/**"
     };
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {

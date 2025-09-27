@@ -14,6 +14,7 @@ public record ElectionRequestDto(
                 @NotNull(message = "name must not be null")
         String name,
         String description,
+        @NotNull(message = "startDate must not be null")
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         Date startDate,
         int duration

@@ -26,6 +26,7 @@ public class UserMapper {
         userResponseDto.setFirstName(user.getFirstName());
         userResponseDto.setUsername(user.getUsername() != null ? user.getUsername() : "Neant");
         userResponseDto.setRoles(user.getRoles());
+        userResponseDto.setFileUri(user.getFileUri() != null ? user.getFileUri() : "Neant");
         return userResponseDto;
     }
 

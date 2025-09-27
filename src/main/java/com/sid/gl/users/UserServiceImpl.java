@@ -1,17 +1,19 @@
 package com.sid.gl.users;
 
 import com.sid.gl.commons.DataResponse;
+import com.sid.gl.exceptions.ResourceNotFoundException;
 import com.sid.gl.exceptions.RoleNotFoundException;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
+import com.sid.gl.medias.ElectionStorage;
 import com.sid.gl.utils.ElectionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +33,8 @@ public class UserServiceImpl implements UserService{
     private final RoleRepository roleRepository;
 
     private final static String ROLE_NAME = "ELECTOR";
+
+    private final ElectionStorage electionStorage;
 
     @Override
     public UserResponseDto register(UserRequestDto userRequest) throws UserAlreadyExistException {
@@ -111,6 +115,22 @@ public class UserServiceImpl implements UserService{
     return UserMapper.toUserResponse(savedUser);
     }
 
+    @Override
+    public UserResponseDto deleteRoleUser(Long id, RoleRequestDto roleRequestDto) throws UserNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        deleteCurrentRole(user,roleRequestDto.roleName());
+        User savedUser = userRepository.save(user);
+        return UserMapper.toUserResponse(savedUser);
+    }
+
+
+
+    @Override
+    public UserResponseDto uploadImage(Long id, Optional<MultipartFile> image) throws ResourceNotFoundException {
+        return electionStorage.storeFile(id,image);
+    }
+
     private void attributeDefaultRole(User user, String roleName) {
         Role role;
         Optional<Role> roleOption = roleRepository.findByRoleName(roleName);
@@ -126,6 +146,14 @@ public class UserServiceImpl implements UserService{
         }
         log.info("role attribué à l'utilisateur");
 
+
+    }
+
+    private void deleteCurrentRole(User user, String role){
+        Role role1 = roleRepository.findByRoleName(role).
+                orElseThrow(() -> new RoleNotFoundException("Role not found"));
+        user.getRoles().remove(role1);
+        userRepository.save(user);
     }
 
     //todo liste des candidats (admin)

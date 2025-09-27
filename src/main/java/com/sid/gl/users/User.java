@@ -40,6 +40,8 @@ public class User extends BaseEntity{
     @CollectionTable(name="user_elections_voted", joinColumns = @JoinColumn(name = "electeur_id"))
     @Column(name = "elections_voted")
     private List<String> elections_voted=new ArrayList<>();
+    // uri image
+    private String fileUri;  //http://localhost:8080/api/v1/users/1/image
 
 
 }  

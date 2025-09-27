@@ -80,9 +80,21 @@ public class GestionElectionApplication implements CommandLineRunner {
 		// merge du dev sur la branche main
 
 		//done : implementation du process souscription candidat (supervisor) (creation du bulletin du candidat)
-		// todo upload une image d'un candidat
+		// done upload une image d'un candidat (directory)
+
+
+		// feature/annulation-candidature
+
+		// todo customiser le template de notification de l'ouverture de l'élection
+		// todo mettre un endpoint pour modifier ses infos (lastName,firstName,email)
+		//todo endpoint pour modifier le name ou la description d'une election
+		//todo mettre le process d'annulation de la candidature d'un candidat  (supervisor) et notifier le candidat (template de notification d'annulation candidature)
+        //todo create annotation to validate extension file
+
 		// progress un cron qui va déclencher l'ouverture d'une election à la date venue à chaque 9h
 		//done  process envoi mail de notification aux électeurs de la plateforme
+
+		// aws S3, azure storage, google cloud storage,minio
 
 		// todo new feature:
 		// todo mettre le process de scrutin

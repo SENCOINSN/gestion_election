@@ -19,7 +19,7 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenApi(
-            @Value("${openapi.service.title}") String serviceTitle,
+            @Value("${openapi.service.title}") String serviceTitle,  //binding
             @Value("${openapi.service.version}") String serviceVersion,
             @Value("${openapi.service.url}") String url
     ){

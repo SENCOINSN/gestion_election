@@ -2,3 +2,6 @@ shedule:
   openElection:
     cron: "0 1 * * * ?"  # run every day at 1:00 AM
     enabled: true
+
+file:
+  upload-path: uploads #chemin du dossier de stockage des fichiers
