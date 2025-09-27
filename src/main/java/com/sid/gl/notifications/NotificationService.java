@@ -1,6 +1,5 @@
 package com.sid.gl.notifications;
 
-import com.sid.gl.exceptions.GestionElectionTechnicalException;
 import com.sid.gl.templates.TemplateHelper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -46,9 +45,8 @@ public class NotificationService implements NotificationFacade {
        taskExecutor.execute(() -> {
            try {
                sendEmailAttachment(to, subject, body, attachmentPath);
-           } catch (Exception e) {
-               log.warn("Technical error send email with attachment");
-               throw new GestionElectionTechnicalException("failed to send email with attachment",e);
+           } catch (MessagingException e) {
+               throw new RuntimeException(e);
            }
        });
     }
@@ -60,8 +58,8 @@ public class NotificationService implements NotificationFacade {
        taskExecutor.execute(() -> {
            try {
                sendEmailWithCustomTemplate(to, templateName, variables);
-           } catch (Exception e) {
-               throw new GestionElectionTechnicalException("Failed to send email template");
+           } catch (MessagingException e) {
+               throw new RuntimeException(e);
            }
        });
     }
@@ -71,32 +69,32 @@ public class NotificationService implements NotificationFacade {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED, UTF_8.name());
-        TemplateHelper templateHelper = TemplateHelper.fromName(templateName);
+
+       TemplateHelper templateHelper = TemplateHelper.fromName(templateName);
+        Context context = new Context();
+        context.setVariables(variables);
         String nameTemplate = templateHelper.getTemplateName();
-        processSendNotification(to,mimeMessage,messageHelper,nameTemplate,variables);
+        processSendNotification(to,mimeMessage,messageHelper,nameTemplate,context);
 
     }
 
 
     private void processSendNotification(String email,MimeMessage  mimeMessage,MimeMessageHelper messageHelper,
-                                         String templateName,Map<String, Object> variables)  {
+                                         String templateName,Context context)  {
         try{
-            Context context = new Context();
-            context.setVariables(variables);
             String htmlTemplate = springTemplateEngine.process(templateName,context);
             messageHelper.setText(htmlTemplate,true);
             messageHelper.setFrom(FROM);
             messageHelper.setTo(email);
             javaMailSender.send(mimeMessage);
             log.info("send email successfully with email {}",email);
-        }catch (Exception e) {
-            log.warn("Technical error send email with template");
-            throw new GestionElectionTechnicalException("failed to send email with template",e);
+        }catch (MessagingException e) {
+            log.warn("WARNING - Cannot send Email to {} ", email);
         }
     }
 
 
-    public void sendSimpleEmail(String email, String subject, String body){
+    private void sendSimpleEmail(String email,String subject,String body){
         log.info("Send email to user ---{}",email);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(FROM);

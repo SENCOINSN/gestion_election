@@ -44,4 +44,5 @@ public class User extends BaseEntity{
     private String fileUri;  //http://localhost:8080/api/v1/users/1/image
 
 
+
 }  
