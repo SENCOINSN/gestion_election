@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -111,6 +110,15 @@ public class UserServiceImpl implements UserService{
     return UserMapper.toUserResponse(savedUser);
     }
 
+    @Override
+    public UserResponseDto deleteRoleUser(Long id, RoleRequestDto roleRequestDto) throws UserNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        deleteCurrentRole(user,roleRequestDto.roleName());
+        User savedUser = userRepository.save(user);
+        return UserMapper.toUserResponse(savedUser);
+    }
+
     private void attributeDefaultRole(User user, String roleName) {
         Role role;
         Optional<Role> roleOption = roleRepository.findByRoleName(roleName);
@@ -126,6 +134,14 @@ public class UserServiceImpl implements UserService{
         }
         log.info("role attribué à l'utilisateur");
 
+
+    }
+
+    private void deleteCurrentRole(User user, String role){
+        Role role1 = roleRepository.findByRoleName(role).
+                orElseThrow(() -> new RoleNotFoundException("Role not found"));
+        user.getRoles().remove(role1);
+        userRepository.save(user);
     }
 
     //todo liste des candidats (admin)
