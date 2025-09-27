@@ -41,4 +41,5 @@ public class User extends BaseEntity{
     @Column(name = "elections_voted")
     private List<String> elections_voted=new ArrayList<>();
 
+
 }  

@@ -9,11 +9,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Set;
 
+//@EnableAsync
+@EnableScheduling
 @SpringBootApplication
 public class GestionElectionApplication implements CommandLineRunner {
 	@Autowired
@@ -77,8 +81,19 @@ public class GestionElectionApplication implements CommandLineRunner {
 
 		//done : implementation du process souscription candidat (supervisor) (creation du bulletin du candidat)
 		// todo upload une image d'un candidat
-		// todo un cron qui va déclencher l'ouverture d'une election à la date venue à chaque 9h
-		//todo  process envoi mail de notification aux électeurs de la plateforme
+		// progress un cron qui va déclencher l'ouverture d'une election à la date venue à chaque 9h
+		//done  process envoi mail de notification aux électeurs de la plateforme
+
+		// todo new feature:
+		// todo mettre le process de scrutin
+		// todo mettre un listener pour chaque vote effectué
+		//todo dans le listener, vérifier si l'election est terminée
+		// todo si election non terminée, on va mettre le process de scrutin et sauvegarder le scrutin
+		//todo si election terminée, on va sauvegarder le scrutin et fermer l'election,
+		//todo comptage des voix sur chaque bulletin du scrutin et custom de la liste des candidats avec le nombre de voix
+		// generation du pdf de résultat
+		//todo soit envoyer au superviseur ou envoyer aux electeurs
+		// qui met fin au process de scrutin
 
 
 

@@ -128,4 +128,9 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    //todo liste des candidats (admin)
+    //todo liste des electeurs (admin)
+    //todo liste des superviseurs (admin)
+    //todo sous format DataResponse
+
 }

@@ -8,6 +8,7 @@ import com.sid.gl.elections.ElectionResponseDto;
 import com.sid.gl.exceptions.ElectionNotFoundException;
 import com.sid.gl.exceptions.GestionElectionNotFoundException;
 import com.sid.gl.exceptions.UserNotFoundException;
+import com.sid.gl.notifications.NotificationFacade;
 import com.sid.gl.users.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +18,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.relation.RoleNotFoundException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -33,6 +32,7 @@ public class BulletinServiceImpl implements BulletinService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ElectionRepository electionRepository;
+    private final NotificationFacade notificationService;
 
     private final static String ROLE_NAME = "CANDIDAT";
 
@@ -62,7 +62,18 @@ public class BulletinServiceImpl implements BulletinService {
         }
         // todo notify user bulletin created successfully
 
-        //todo send email to user
+        //done send email to user
+
+        String electionName = election.getName();
+        String candidatName = user.getFirstName() + " " + user.getLastName();
+        Date dateElection = election.getStartDate();
+
+        Map<String,Object> variables = new HashMap<>();
+        variables.put("nom_election",electionName);
+        variables.put("candidatName",candidatName);
+        variables.put("date_election",dateElection);
+
+        notificationService.sendEmailWithTemplate(user.getEmail(),"confirmation",variables);
 
         //gerer les infos du parti du candidat
         if(bulletinRequestDto.nameParty() != null && bulletinRequestDto.addressParty() != null){

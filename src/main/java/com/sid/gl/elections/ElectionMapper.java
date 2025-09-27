@@ -1,5 +1,7 @@
 package com.sid.gl.elections;
 
+import com.sid.gl.utils.ElectionUtils;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -38,12 +40,10 @@ public class ElectionMapper {
         election.setDescription(electionRequestDto.description());
         //convert date to localdatetime
         Date date = electionRequestDto.startDate();
-        //todo review this after for handle endDate if increase 7h for the duration  endDate
-        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-        election.setStartDate(electionRequestDto.startDate());
-        LocalDateTime endDate = localDateTime.plusHours(electionRequestDto.duration());
-        election.setEndDate(endDate);
+        LocalDateTime endDate = ElectionUtils.getElectionEndDate(date,9, electionRequestDto.duration());
+        election.setStartDate(electionRequestDto.startDate()); // yyyy-MM-dd
+        election.setEndDate(endDate); // yyyy-MM-dd HH:mm:ss
         return election;
     }
 

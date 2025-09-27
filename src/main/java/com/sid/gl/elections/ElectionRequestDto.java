@@ -16,6 +16,6 @@ public record ElectionRequestDto(
         String description,
         @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
         Date startDate,
-        Long duration
+        int duration
 ) {
 }

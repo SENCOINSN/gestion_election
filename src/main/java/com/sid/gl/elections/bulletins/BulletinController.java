@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.relation.RoleNotFoundException;
+import java.util.List;
 
 @RestController
 @RequestMapping(ApiConstants.BASE_PATH+"/bulletins")
@@ -30,7 +31,7 @@ public class BulletinController extends AbstractController {
     @PreAuthorize("hasRole('SUPERVISOR')")
     @Operation(summary = "creation du bulletin du candidat")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createBulletinCandidat(@Valid @RequestBody BulletinRequestDto bulletinRequestDto) throws UserNotFoundException, ElectionNotFoundException, RoleNotFoundException, UserNotFoundException, ElectionNotFoundException, RoleNotFoundException {
+    public ResponseEntity<ApiResponse<BulletinResponseDto>> createBulletinCandidat(@Valid @RequestBody BulletinRequestDto bulletinRequestDto) throws UserNotFoundException, ElectionNotFoundException, RoleNotFoundException, UserNotFoundException, ElectionNotFoundException, RoleNotFoundException {
         String principal = getCurrentUserConnected();
         logger.info("BulletinController: createBulletinCandidat");
         logger.info("user principal {} ", principal);
@@ -38,12 +39,12 @@ public class BulletinController extends AbstractController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllBulletin() {
+    public ResponseEntity<ApiResponse<List<BulletinResponseDto>>> getAllBulletin() {
         return getResponseEntity(bulletinService.getAllBulletin());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getBulletin(@PathVariable Long id) throws GestionElectionNotFoundException {
+    public ResponseEntity<ApiResponse<BulletinResponseDto>> getBulletin(@PathVariable Long id) throws GestionElectionNotFoundException {
         return getResponseEntity(bulletinService.getBulletin(id));
     }
 }
