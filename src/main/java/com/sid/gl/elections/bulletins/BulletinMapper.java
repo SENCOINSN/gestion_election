@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 
 
 public class BulletinMapper {
-
+//dans le cas où on fait le mapping à la main
 
     private BulletinMapper () {
     }

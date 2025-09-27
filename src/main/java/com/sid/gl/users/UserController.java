@@ -3,6 +3,7 @@ package com.sid.gl.users;
 import com.sid.gl.commons.AbstractController;
 import com.sid.gl.commons.ApiConstants;
 import com.sid.gl.commons.ApiResponse;
+import com.sid.gl.commons.DataResponse;
 import com.sid.gl.exceptions.RoleNotFoundException;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
@@ -26,7 +27,7 @@ public class UserController extends AbstractController {
 
     @Operation(summary = "Inscription d'un utilisateur")
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody @Valid UserRequestDto request) throws UserAlreadyExistException {
+    public ResponseEntity<ApiResponse<UserResponseDto>> register(@RequestBody @Valid UserRequestDto request) throws UserAlreadyExistException {
         return getResponseEntity(userService.register(request));
     }
 
@@ -34,7 +35,7 @@ public class UserController extends AbstractController {
     @Operation(summary = "recuperation la liste des utilisateurs")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")  // admin
-    public ResponseEntity<ApiResponse> getAllUsers(
+    public ResponseEntity<ApiResponse<DataResponse>> getAllUsers(
         @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
 
         @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size
@@ -46,7 +47,7 @@ public class UserController extends AbstractController {
 
     @Operation(summary = "recuperation d'un utilisateur depuis l'id")
     @GetMapping("/get/{id}")
-    public ResponseEntity<ApiResponse> getUser(
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUser(
             @Parameter(name = "id",required = true)
             @PathVariable Long id) throws UserNotFoundException {
         return getResponseEntity(userService.getUser(id));
@@ -56,11 +57,16 @@ public class UserController extends AbstractController {
     @Operation(summary = "Ajout d'un role a un utilisateur")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addRole/{id}")
-    public ResponseEntity<ApiResponse> addRole(
+    public ResponseEntity<ApiResponse<UserResponseDto>> addRole(
             @Parameter(name = "id",required = true)
             @PathVariable Long id,
             @RequestBody @Valid RoleRequestDto request) throws UserNotFoundException, RoleNotFoundException {
         return getResponseEntity(userService.addRole(id,request));
     }
+
+    //todo liste des candidats (admin)
+    //todo liste des electeurs (admin)
+    //todo liste des superviseurs (admin)
+
 
 }

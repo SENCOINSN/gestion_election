@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,10 @@ public interface ElectionRepository extends JpaRepository<Election, Long> {
 
     @Query("select e from Election e where e.active = true")
     List<ElectionInfoProjection> getElectionIsActive();
+
+    @Query("select e from Election e where e.startDate = current_date")
+    List<Election> findByStartDate();
+
 
     //@Override
     //Page<Election> getA(Pageable pageable);

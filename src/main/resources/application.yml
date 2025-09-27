@@ -1,0 +1,4 @@
+shedule:
+  openElection:
+    cron: "0 1 * * * ?"  # run every day at 1:00 AM
+    enabled: true

@@ -1,7 +1,11 @@
 package com.sid.gl.elections;
 
+import com.sid.gl.utils.ElectionUtils;
+
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -15,7 +19,9 @@ public class ElectionMapper {
                 election.getId(),
                 election.getName(),
                 election.getDescription(),
-                election.getStartDate()
+                election.getStartDate(),
+                election.getEndDate(),
+                election.isActive()
         );
     }
 
@@ -32,19 +38,25 @@ public class ElectionMapper {
         Election election = new Election();
         election.setName(electionRequestDto.name());
         election.setDescription(electionRequestDto.description());
-        election.setStartDate(electionRequestDto.startDate());
-        LocalDateTime endDate = electionRequestDto.startDate().plusHours(electionRequestDto.duration());
-        election.setEndDate(endDate);
+        //convert date to localdatetime
+        Date date = electionRequestDto.startDate();
+
+        LocalDateTime endDate = ElectionUtils.getElectionEndDate(date,9, electionRequestDto.duration());
+        election.setStartDate(electionRequestDto.startDate()); // yyyy-MM-dd
+        election.setEndDate(endDate); // yyyy-MM-dd HH:mm:ss
         return election;
     }
 
     //todo converion electionInfoProjection => electionResponseDto
     public static ElectionResponseDto fromElectionProjection(ElectionInfoProjection electionInfoProjection) {
+        //todo handle here to custom date format localdatetime
         return new ElectionResponseDto(
                 electionInfoProjection.getId(),
                 electionInfoProjection.getName(),
                 electionInfoProjection.getDescription(),
-                electionInfoProjection.getStartDate()
+                electionInfoProjection.getStartDate(),
+                electionInfoProjection.getEndDate(),
+                electionInfoProjection.isActive()
         );
     }
 }

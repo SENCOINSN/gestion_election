@@ -21,7 +21,7 @@ public class AuthController extends AbstractController {
     //todo api login
 
     @PostMapping(value = "/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody AuthRequestDto authRequestDto){
+    public ResponseEntity<ApiResponse<JwtResponseDto>> login(@RequestBody AuthRequestDto authRequestDto){
         return getResponseEntity(authService.authenticate(authRequestDto));
     }
 

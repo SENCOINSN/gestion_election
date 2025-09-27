@@ -1,10 +1,7 @@
 package com.sid.gl.commons;
 
 
-import com.sid.gl.exceptions.ElectionAlreadyExistException;
-import com.sid.gl.exceptions.ElectionNotFoundException;
-import com.sid.gl.exceptions.UserAlreadyExistException;
-import com.sid.gl.exceptions.UserNotFoundException;
+import com.sid.gl.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -75,6 +72,15 @@ public class GestionElectionControllerAdvice {
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiResponse<?> handleServiceException(BadCredentialsException exception){
+        ApiResponse<?> response = new ApiResponse<>();
+        response.setErrorDTOS(Collections.singletonList(new ErrorDTO("", exception.getMessage())));
+        response.setStatus(Status.ERROR);
+        return response;
+    }
+
+    @ExceptionHandler(GestionElectionNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<?> handleServiceException(GestionElectionNotFoundException exception){
         ApiResponse<?> response = new ApiResponse<>();
         response.setErrorDTOS(Collections.singletonList(new ErrorDTO("", exception.getMessage())));
         response.setStatus(Status.ERROR);

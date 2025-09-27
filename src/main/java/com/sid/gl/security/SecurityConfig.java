@@ -67,7 +67,6 @@ private final JwtAuthFilter jwtAuthFilter;
                .authorizeHttpRequests(req ->
                        req
                                .requestMatchers(PUBLIC_URLS).permitAll()
-                               //.requestMatchers("/api/v1/users/all").hasRole("ADMIN")
                                .anyRequest()
                                .authenticated()
                )
@@ -84,7 +83,6 @@ private final JwtAuthFilter jwtAuthFilter;
         authenticationProvider.setUserDetailsService(userDetailsService(userRepository));
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
-
     }
 
     @Bean
