@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     //private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService{
         String passwordHash = bCryptPasswordEncoder.encode(userRequest.password());
         user.setPassword(passwordHash);
         //todo attribuer role user
-        attributeDefaultRole(user,ROLE_NAME);
+        attributeDefaultRole(user, ROLE_NAME);
 
         // todo save user
         User savedUser = userRepository.save(user);
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService{
         return convertUserToDataResponse(users);
     }
 
-    private DataResponse convertUserToDataResponse(Page<User> users){
+    private DataResponse convertUserToDataResponse(Page<User> users) {
         List<User> userContents = users.getContent();
         List<UserResponseDto> responses = userContents
                 .stream()
@@ -92,7 +92,6 @@ public class UserServiceImpl implements UserService{
     }
 
 
-
     private void verifyEmailAlreadyExist(String email) throws UserAlreadyExistException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
@@ -105,16 +104,16 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto addRole(Long id, RoleRequestDto role) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
-        attributeDefaultRole(user,role.roleName());
+        attributeDefaultRole(user, role.roleName());
         User savedUser = userRepository.save(user);
-    return UserMapper.toUserResponse(savedUser);
+        return UserMapper.toUserResponse(savedUser);
     }
 
     @Override
     public UserResponseDto deleteRoleUser(Long id, RoleRequestDto roleRequestDto) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        deleteCurrentRole(user,roleRequestDto.roleName());
+        deleteCurrentRole(user, roleRequestDto.roleName());
         User savedUser = userRepository.save(user);
         return UserMapper.toUserResponse(savedUser);
     }
@@ -122,13 +121,13 @@ public class UserServiceImpl implements UserService{
     private void attributeDefaultRole(User user, String roleName) {
         Role role;
         Optional<Role> roleOption = roleRepository.findByRoleName(roleName);
-        if(roleOption.isEmpty()){
+        if (roleOption.isEmpty()) {
             log.info("creation role niveau base de données");
             Role roleToSave = new Role();
             roleToSave.setRoleName(roleName);
             role = roleRepository.save(roleToSave);
             user.getRoles().add(role);
-        }else{
+        } else {
             role = roleOption.get();
             user.getRoles().add(role);
         }
@@ -137,7 +136,7 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    private void deleteCurrentRole(User user, String role){
+    private void deleteCurrentRole(User user, String role) {
         Role role1 = roleRepository.findByRoleName(role).
                 orElseThrow(() -> new RoleNotFoundException("Role not found"));
         user.getRoles().remove(role1);
@@ -148,5 +147,26 @@ public class UserServiceImpl implements UserService{
     //todo liste des electeurs (admin)
     //todo liste des superviseurs (admin)
     //todo sous format DataResponse
+
+
+    @Override
+    public DataResponse getAllElecteurs(int page, int size) {
+        Page<User> users = userRepository.findAll(PageRequest.of(page, size));
+        users.stream().filter(user -> user.getRoles().stream().anyMatch(role -> role.getRoleName().equals("ELECTOR")));
+        return convertUserToDataResponse(users);
+    }
+    @Override
+    public DataResponse getAllSuperviseurs(int page, int size) {
+        Page<User> users = userRepository.findAll(PageRequest.of(page, size));
+        users.stream().filter(user -> user.getRoles().stream().anyMatch(role -> role.getRoleName().equals("SUPERVISOR")));
+        return convertUserToDataResponse(users);
+    }
+
+    @Override
+    public DataResponse getAllCandidats(int page, int size) {
+        Page<User> users = userRepository.findAll(PageRequest.of(page, size));
+        users.stream().filter(user -> user.getRoles().stream().anyMatch(role -> role.getRoleName().equals("CANDIDAT")));
+        return convertUserToDataResponse(users);
+    }
 
 }

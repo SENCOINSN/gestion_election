@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("select u from User u inner join u.roles roles where roles.roleName = ?1")
     List<User> findByRoles_RoleName(String roleName);
 
-
+    Page<User> findByRoles_RoleName(String roleName, Pageable pageable);
     //liste des candidats (admin)
 
     //liste des superviseurs (admin)
