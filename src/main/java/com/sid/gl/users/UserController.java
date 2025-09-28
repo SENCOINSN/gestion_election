@@ -68,5 +68,33 @@ public class UserController extends AbstractController {
     //todo liste des electeurs (admin)
     //todo liste des superviseurs (admin)
 
+    @Operation(summary = "recuperation la liste des electeurs")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/electeurs")
+    public ResponseEntity<ApiResponse<DataResponse>> getAllElecteurs(
+            @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
+
+            @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size){
+        return  getResponseEntity(userService.getAllElecteurs(page,size));
+
+    }
+
+    @Operation(summary = "recuperation la liste des candidats")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/candidats")
+    public ResponseEntity<ApiResponse<DataResponse>> getAllCandidats(
+            @RequestParam(name = "page", defaultValue = ApiConstants.PAGE) int page,
+            @RequestParam(name = "size", defaultValue = ApiConstants.SIZE)int size){
+        return getResponseEntity(userService.getAllCandidats(page,size));
+    }
+
+    @Operation(summary = "recuperation la liste des superviseurs")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/superviseurs")
+    public ResponseEntity<ApiResponse<DataResponse>> getAllSuperviseurs(
+            @RequestParam(name = "page", defaultValue = ApiConstants.PAGE) int page,
+            @RequestParam(name = "size", defaultValue = ApiConstants.SIZE)int size){
+        return getResponseEntity(userService.getAllSuperviseurs(page,size));
+    }
 
 }
