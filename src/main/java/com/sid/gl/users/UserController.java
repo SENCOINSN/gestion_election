@@ -3,6 +3,8 @@ package com.sid.gl.users;
 import com.sid.gl.commons.AbstractController;
 import com.sid.gl.commons.ApiConstants;
 import com.sid.gl.commons.ApiResponse;
+import com.sid.gl.commons.DataResponse;
+import com.sid.gl.exceptions.ResourceNotFoundException;
 import com.sid.gl.exceptions.RoleNotFoundException;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
@@ -10,9 +12,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = ApiConstants.BASE_PATH+"/users")
@@ -26,7 +34,7 @@ public class UserController extends AbstractController {
 
     @Operation(summary = "Inscription d'un utilisateur")
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody @Valid UserRequestDto request) throws UserAlreadyExistException {
+    public ResponseEntity<ApiResponse<UserResponseDto>> register(@RequestBody @Valid UserRequestDto request) throws UserAlreadyExistException {
         return getResponseEntity(userService.register(request));
     }
 
@@ -34,7 +42,7 @@ public class UserController extends AbstractController {
     @Operation(summary = "recuperation la liste des utilisateurs")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")  // admin
-    public ResponseEntity<ApiResponse> getAllUsers(
+    public ResponseEntity<ApiResponse<DataResponse>> getAllUsers(
         @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
 
         @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size
@@ -46,7 +54,7 @@ public class UserController extends AbstractController {
 
     @Operation(summary = "recuperation d'un utilisateur depuis l'id")
     @GetMapping("/get/{id}")
-    public ResponseEntity<ApiResponse> getUser(
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUser(
             @Parameter(name = "id",required = true)
             @PathVariable Long id) throws UserNotFoundException {
         return getResponseEntity(userService.getUser(id));
@@ -56,11 +64,42 @@ public class UserController extends AbstractController {
     @Operation(summary = "Ajout d'un role a un utilisateur")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addRole/{id}")
-    public ResponseEntity<ApiResponse> addRole(
+    public ResponseEntity<ApiResponse<UserResponseDto>> addRole(
             @Parameter(name = "id",required = true)
             @PathVariable Long id,
             @RequestBody @Valid RoleRequestDto request) throws UserNotFoundException, RoleNotFoundException {
         return getResponseEntity(userService.addRole(id,request));
     }
+
+
+    @GetMapping(value="/filejpg/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public FileSystemResource getimfileimageJPG(@PathVariable("fileName") String fileName) {
+        return new FileSystemResource(new File("./uploads/"+fileName));
+    }
+
+    @GetMapping(value="/filepng/{fileName}",produces = MediaType.IMAGE_PNG_VALUE)
+    @ResponseBody
+    public FileSystemResource getimfileimagePNG(@PathVariable("fileName") String fileName) {
+        return new FileSystemResource(new File("./uploads/"+fileName));
+    }
+
+    @Operation(summary = "upload image")
+    @PreAuthorize("hasRole('SUPERVISOR')") //todo enhance this
+    @PostMapping(value = "/upload/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<UserResponseDto>> uploadImage(
+            @PathVariable("id")Long id,
+            @RequestParam(value = "file") Optional<MultipartFile> file) throws UserNotFoundException, ResourceNotFoundException {
+           return getResponseEntity(userService.uploadImage(id,file));
+
+    }
+
+
+    //todo liste des candidats (admin)
+    //todo liste des electeurs (admin)
+    //todo liste des superviseurs (admin)
+
 
 }

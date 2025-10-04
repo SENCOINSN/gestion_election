@@ -42,7 +42,9 @@ private final JwtAuthFilter jwtAuthFilter;
             "/swagger-ui/favicon-16x16.png",
             "/static/**",
             "/resources/**",
-            "/images/**"
+            "/images/**",
+            "/api/v1/users/filejpg/**",
+            "/api/v1/users/filepng/**"
     };
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
@@ -67,7 +69,6 @@ private final JwtAuthFilter jwtAuthFilter;
                .authorizeHttpRequests(req ->
                        req
                                .requestMatchers(PUBLIC_URLS).permitAll()
-                               //.requestMatchers("/api/v1/users/all").hasRole("ADMIN")
                                .anyRequest()
                                .authenticated()
                )
@@ -84,7 +85,6 @@ private final JwtAuthFilter jwtAuthFilter;
         authenticationProvider.setUserDetailsService(userDetailsService(userRepository));
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
-
     }
 
     @Bean

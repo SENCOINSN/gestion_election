@@ -4,12 +4,16 @@ import com.sid.gl.commons.DataResponse;
 import com.sid.gl.elections.bulletins.BulletinRepository;
 import com.sid.gl.exceptions.ElectionAlreadyExistException;
 import com.sid.gl.exceptions.ElectionNotFoundException;
+import com.sid.gl.exceptions.UserNotFoundException;
+import com.sid.gl.users.User;
+import com.sid.gl.users.UserRepository;
 import com.sid.gl.utils.ElectionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +26,7 @@ import java.util.Optional;
 public class ElectionServiceImpl implements ElectionService {
 
     private final ElectionRepository electionRepository;
-    private final BulletinRepository bulletinRepository;
-
+    private final UserRepository userRepository;
 
     //role admin
     @Override
@@ -50,6 +53,7 @@ public class ElectionServiceImpl implements ElectionService {
     }
 
     //role admin
+    @Transactional(readOnly = true)
     @Override
     public DataResponse getAllElections(int page, int size) {
         Page <Election> pageElections = electionRepository.findAll(PageRequest.of(page, size));
@@ -65,6 +69,23 @@ public class ElectionServiceImpl implements ElectionService {
         return electionInfoProjections
                 .stream()
                 .filter(Objects::nonNull)
+                .map(ElectionMapper::fromElectionProjection)
+                .toList();
+
+    }
+
+    @Override
+    public List<ElectionResponseDto> getElectionActiveByUser(String username) throws UserNotFoundException {
+       log.info("ElectionService::getElectionActiveByUser {}", username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+        List<ElectionInfoProjection> electionsActived =
+                electionRepository.getElectionIsActive();
+        List<String> electionsParticipated = user.getElections_voted();
+
+        return electionsActived
+                .stream()
+                .filter(electionInfoProjection -> !electionsParticipated.contains(username))
                 .map(ElectionMapper::fromElectionProjection)
                 .toList();
 
