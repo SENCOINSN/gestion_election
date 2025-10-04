@@ -43,10 +43,10 @@ public class ScrutinServiceImpl implements ScrutinService {
         User electeur = getElecteur(username);
         scrutin.setElecteurId(electeur.getId());
         scrutin.setState(ScrutinState.PENDING); // en attente de validation otp
-       Scrutin scrutinSaved = scrutinRepository.save(scrutin);
-
         //todo generer otp
         String otp = generateOtp(username);
+        scrutin.setOtp(otp);
+        Scrutin scrutinSaved = scrutinRepository.save(scrutin);
         //todo send email to electeur to validate otp
         notificationService.sendSimpleEmail(electeur.getEmail(),
                 "OTP Validation", "Pour l'approbation de votre scrutin," +
@@ -63,7 +63,11 @@ public class ScrutinServiceImpl implements ScrutinService {
             throw new BadValidateException("l'OTP est invalide ou expiré");
         }
         User electeur = getElecteur(username);
-        Scrutin scrutin = scrutinRepository.findByElecteurId(electeur.getId());
+        Scrutin scrutin = scrutinRepository.findByOtp(otp);
+        if (scrutin == null) {
+            log.error("Scrutin not found for OTP: {}", otp);
+            throw new BadValidateException("Scrutin not found for the provided OTP");
+        }
         Bulletin bulletin = bulletinRepository.findById(scrutin.getBulletinId()).orElse(null);
         Election election = electionRepository.findById(bulletin.getElectionId()).orElse(null);
 

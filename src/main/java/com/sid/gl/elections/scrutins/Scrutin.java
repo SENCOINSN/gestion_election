@@ -17,4 +17,5 @@ public class Scrutin extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ScrutinState state;
     private int failed_attemps=0;
+    private String otp;
 }
