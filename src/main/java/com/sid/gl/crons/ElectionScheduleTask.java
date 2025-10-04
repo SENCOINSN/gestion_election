@@ -3,6 +3,7 @@ package com.sid.gl.crons;
 import com.sid.gl.elections.Election;
 import com.sid.gl.elections.ElectionRepository;
 import com.sid.gl.notifications.NotificationService;
+import com.sid.gl.templates.TemplateHelper;
 import com.sid.gl.users.Role;
 import com.sid.gl.users.User;
 import com.sid.gl.users.UserRepository;
@@ -12,8 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -64,11 +64,23 @@ public class ElectionScheduleTask {
     }
 
 
-    private void notifyElecteur(Election election,User electeur){
-        String subject = "Notification d'ouverture d'une election";
+    private void notifyElecteur(Election election,User electeur) {
+       /* String subject = "Notification d'ouverture d'une election";
         String body = format("Bonjour %s %s , l'élection %s a été ouverte\n . Veuillez entrer dans la plateforme et effectuer votre droit le plus absolu !!",
                 electeur.getFirstName(),electeur.getLastName(),election.getName());
         notificationService.sendEmail(electeur.getEmail(),subject,body);
-    }
+    }*/
+        String electionName = election.getName();
+        String electeurName = electeur.getFirstName() + " " + electeur.getLastName();
+        Date dateElection = election.getStartDate();
 
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("nameElection", electionName);
+        variables.put("nameElector", electeurName);
+        variables.put("date_election", dateElection);
+
+        TemplateHelper template = TemplateHelper.fromName("open_election");
+
+        notificationService.sendEmailWithTemplate(electeur.getEmail(), template.getSubject(), variables);
+    }
 }

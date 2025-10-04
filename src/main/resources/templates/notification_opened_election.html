@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .email-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #007bff;
+        }
+        .footer {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <h2>Bonjour {{firstName}} {{lastName}},</h2>
+    <p>
+        Nous avons le plaisir de vous informer que l’élection <strong>{{electionName}}</strong> est désormais ouverte 🎉.
+    </p>
+    <p>
+        Connectez-vous dès maintenant sur la plateforme pour exercer votre droit de vote :
+    </p>
+    <a class="button" href="{{platformLink}}">Accéder à la plateforme</a>
+    <p class="footer">
+        Merci pour votre engagement citoyen.<br>
+        — L’équipe électorale
+    </p>
+</div>
+</body>
+</html>

@@ -1,12 +1,15 @@
 package com.sid.gl.templates;
 
+import com.sid.gl.notifications.NotificationFacade;
 import lombok.Getter;
 
 import java.util.Arrays;
 
 @Getter
 public enum TemplateHelper {
-    CONFIRMATION_CANDIDATURE("confirmation_candidature.html", "Confirmation de candidature", "confirmation");
+    CONFIRMATION_CANDIDATURE("confirmation_candidature.html", "Confirmation de candidature", "confirmation"),
+    OUVERTURE_ELECTION("election_opened_template.html", "Notification d'ouverture d'une élection", "open_election");
+
 
     private final String templateName;
     private final String subject;
@@ -25,5 +28,4 @@ public enum TemplateHelper {
                 .findFirst()
                 .orElse(null);
     }
-
 }
