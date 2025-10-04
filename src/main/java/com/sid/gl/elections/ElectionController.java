@@ -8,6 +8,7 @@ import com.sid.gl.commons.DataResponse;
 import com.sid.gl.exceptions.ElectionAlreadyExistException;
 import com.sid.gl.exceptions.ElectionNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +54,17 @@ public class ElectionController extends AbstractController {
     @GetMapping("get/active")
     public ResponseEntity<ApiResponse<List<ElectionResponseDto>>> getAllElectionsByElectionId(){
         return getResponseEntity(electionService.getElectionIsActive());
+    }
+
+    //role admin
+    //Edit name or description of an election
+    @Operation(summary = "edition d'un election")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<ApiResponse<ElectionResponseDto>> editElection(
+            @Parameter(name = "id", required = true)
+            @PathVariable Long id,
+            @RequestBody @Valid ElectionRequestDto election) throws ElectionNotFoundException {
+        return getResponseEntity(electionService.editElection(id,election));
     }
 }

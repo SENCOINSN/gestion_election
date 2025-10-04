@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +65,17 @@ public class UserController extends AbstractController {
         return getResponseEntity(userService.addRole(id,request));
     }
 
+    //delete current Role
+    @Operation(summary = "suppression de role")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/deleteRole")
+    public  ResponseEntity<ApiResponse<UserResponseDto>> deleteRoleUser(
+            @Parameter(name = "id", required = true)
+            @PathVariable Long id,
+            @RequestBody @Valid RoleRequestDto role) throws RoleNotFoundException, UserNotFoundException {
+        return getResponseEntity(userService.deleteRoleUser(id, role));
+    }
+
     //todo liste des candidats (admin)
     //todo liste des electeurs (admin)
     //todo liste des superviseurs (admin)
@@ -71,30 +83,41 @@ public class UserController extends AbstractController {
     @Operation(summary = "recuperation la liste des electeurs")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/electeurs")
-    public ResponseEntity<ApiResponse<DataResponse>> getAllElecteurs(
+    public ResponseEntity<ApiResponse<DataResponse>> getAllElectors(
             @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
 
             @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size){
-        return  getResponseEntity(userService.getAllElecteurs(page,size));
+        return  getResponseEntity(userService.getAllElectors(page,size));
 
     }
 
     @Operation(summary = "recuperation la liste des candidats")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/candidats")
-    public ResponseEntity<ApiResponse<DataResponse>> getAllCandidats(
+    public ResponseEntity<ApiResponse<DataResponse>> getAllCandidates(
             @RequestParam(name = "page", defaultValue = ApiConstants.PAGE) int page,
             @RequestParam(name = "size", defaultValue = ApiConstants.SIZE)int size){
-        return getResponseEntity(userService.getAllCandidats(page,size));
+        return getResponseEntity(userService.getAllCandidates(page,size));
     }
 
     @Operation(summary = "recuperation la liste des superviseurs")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/superviseurs")
-    public ResponseEntity<ApiResponse<DataResponse>> getAllSuperviseurs(
+    public ResponseEntity<ApiResponse<DataResponse>> getAllSupervisors(
             @RequestParam(name = "page", defaultValue = ApiConstants.PAGE) int page,
             @RequestParam(name = "size", defaultValue = ApiConstants.SIZE)int size){
-        return getResponseEntity(userService.getAllSuperviseurs(page,size));
+        return getResponseEntity(userService.getAllSupervisors(page,size));
+    }
+
+    //edit user
+    @Operation(summary = "edition d'un utilisateur")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<ApiResponse<UserResponseDto>> editUser(
+            @Parameter(name = "id", required = true)
+            @PathVariable Long id,
+            @RequestBody @Valid UserRequestDto user) throws UserNotFoundException {
+        return getResponseEntity(userService.editUser(id,user));
     }
 
 }

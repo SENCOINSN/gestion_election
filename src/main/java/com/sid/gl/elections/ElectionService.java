@@ -11,4 +11,5 @@ public interface ElectionService {
     ElectionResponseDto getElection(Long id) throws ElectionNotFoundException;
     DataResponse getAllElections(int page, int size);
     List<ElectionResponseDto> getElectionIsActive();
+    ElectionResponseDto editElection(Long id, ElectionRequestDto election) throws ElectionNotFoundException;
 }

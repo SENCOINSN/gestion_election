@@ -1,7 +1,6 @@
 package com.sid.gl.users;
 
 import com.sid.gl.commons.DataResponse;
-import com.sid.gl.exceptions.RoleNotFoundException;
 import com.sid.gl.exceptions.UserAlreadyExistException;
 import com.sid.gl.exceptions.UserNotFoundException;
 
@@ -11,7 +10,10 @@ public interface UserService {
     UserResponseDto getUser(Long id) throws UserNotFoundException;
     UserResponseDto addRole(Long id,RoleRequestDto role) throws UserNotFoundException;
     UserResponseDto deleteRoleUser(Long id, RoleRequestDto role) throws UserNotFoundException;
-    DataResponse getAllElecteurs(int page,int size);
-    DataResponse getAllSuperviseurs(int page,int size);
-    DataResponse getAllCandidats(int page,int size);
+    DataResponse getAllElectors(int page,int size);
+    DataResponse getAllSupervisors(int page,int size);
+    DataResponse getAllCandidates(int page, int size);
+
+    // Edit user
+    UserResponseDto editUser(Long id, UserRequestDto user) throws UserNotFoundException;
 }

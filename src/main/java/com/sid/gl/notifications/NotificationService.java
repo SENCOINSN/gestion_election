@@ -21,7 +21,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class NotificationService implements NotificationFacade {
+public class  NotificationService implements NotificationFacade {
     private final JavaMailSender javaMailSender;
     private final String FROM = "seyeadam28@gmail.com";
     private final TaskExecutor taskExecutor;
