@@ -12,7 +12,7 @@ public class AbstractController {
         return authentication.getName();
     }
 
-    public <T> ResponseEntity<ApiResponse> getResponseEntity(T response) {
+    public <T> ResponseEntity<ApiResponse<T>> getResponseEntity(T response) {
         ApiResponse<T> responseDTO = ApiResponse
                 .<T>builder()
                 .status(Status.SUCCESS)

@@ -14,4 +14,7 @@ import lombok.Setter;
 public class Scrutin extends BaseEntity {
     private Long bulletinId;
     private Long electeurId;
+    @Enumerated(EnumType.STRING)
+    private ScrutinState state;
+    private int failed_attemps=0;
 }
