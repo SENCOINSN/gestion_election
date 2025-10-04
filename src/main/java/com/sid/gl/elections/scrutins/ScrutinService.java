@@ -7,5 +7,5 @@ import java.security.NoSuchAlgorithmException;
 
 public interface ScrutinService {
     Long vote(ScrutinVoiceRequest request,String username) throws ElectionNotFoundException, NoSuchAlgorithmException;
-    void validateOtp(String otp, String username) throws ElectionNotFoundException, NoSuchAlgorithmException, BadValidateException;
+    String validateOtp(String otp, String username,Long bulletinId) throws ElectionNotFoundException, NoSuchAlgorithmException, BadValidateException;
 }

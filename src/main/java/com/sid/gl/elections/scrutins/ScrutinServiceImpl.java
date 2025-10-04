@@ -1,6 +1,7 @@
 package com.sid.gl.elections.scrutins;
 
 
+import com.sid.gl.commons.ApiConstants;
 import com.sid.gl.elections.Election;
 import com.sid.gl.elections.ElectionRepository;
 import com.sid.gl.elections.bulletins.Bulletin;
@@ -17,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
@@ -34,6 +37,7 @@ public class ScrutinServiceImpl implements ScrutinService {
     private final BulletinRepository bulletinRepository;
 
 
+    @Transactional
     @Override
     public Long vote(ScrutinVoiceRequest request,String username) throws ElectionNotFoundException, NoSuchAlgorithmException {
         log.info("Vote request: {}",request);
@@ -45,7 +49,6 @@ public class ScrutinServiceImpl implements ScrutinService {
         scrutin.setState(ScrutinState.PENDING); // en attente de validation otp
         //todo generer otp
         String otp = generateOtp(username);
-        scrutin.setOtp(otp);
         Scrutin scrutinSaved = scrutinRepository.save(scrutin);
         //todo send email to electeur to validate otp
         notificationService.sendSimpleEmail(electeur.getEmail(),
@@ -55,37 +58,48 @@ public class ScrutinServiceImpl implements ScrutinService {
 
     }
 
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
-    public void validateOtp(String otp, String username) throws NoSuchAlgorithmException, BadValidateException {
+    public String validateOtp(String otp, String username,Long bulletinId) throws NoSuchAlgorithmException, BadValidateException {
         log.info("Validate otp request: {}",otp);
+        User elector = getElecteur(username);
+        Optional<Scrutin> optScrutin = scrutinRepository.findByBulletinIdAndElecteurId(bulletinId,elector.getId()); // not good il faut ajouter electeurId (eviter la duplication)
+        if(optScrutin.isEmpty()){
+            log.error("scrutin introuvable !!");
+            throw new BadValidateException("scrutin introuvable pour validation otp !!");
+        }
+        Scrutin scrutin = optScrutin.get();
+
         if(BooleanUtils.isFalse(otpHelper.verifyOtpWithHash(otp,username))){
             log.error("OTP is invalid or expired");
-            throw new BadValidateException("l'OTP est invalide ou expiré");
+            // todo on incrementer le nombre d'echecs de la validation du scrutin otp
+            verifyAttemps(scrutin);
         }
-        User electeur = getElecteur(username);
-        Scrutin scrutin = scrutinRepository.findByOtp(otp);
-        if (scrutin == null) {
-            log.error("Scrutin not found for OTP: {}", otp);
-            throw new BadValidateException("Scrutin not found for the provided OTP");
-        }
-        Bulletin bulletin = bulletinRepository.findById(scrutin.getBulletinId()).orElse(null);
+
+        Bulletin bulletin = bulletinRepository.findById(bulletinId).orElse(null);
+        assert bulletin != null;
         Election election = electionRepository.findById(bulletin.getElectionId()).orElse(null);
 
         scrutin.setState(ScrutinState.COMPLETED);
         scrutinRepository.save(scrutin);
 
-        electeur.getElections_voted().add(election.getName()); // update user with election voted
-        userRepository.save(electeur);
+        //deja participé à cette élection (on le met dans la liste des elections votées)
+        elector.getElections_voted().add(election.getName()); // update user with election voted
+        userRepository.save(elector);
 
         //todo send email to electeur to confirm vote
-        notificationService.sendSimpleEmail(electeur.getEmail(),
+        notificationService.sendSimpleEmail(elector.getEmail(),
                 "Confirmation de vote", "Votre vote a été enregistré avec succès");
 
         // publication event
         ElectionEvent event = new ElectionEvent(this,election);
         electionEventPublisher.publishEvent(event);
 
+        return "Scrutin validé avec succés";
+
     }
+
+    //todo implementer renvoyer otp 
 
     private String generateOtp(String identifier) throws NoSuchAlgorithmException {
         return otpHelper.generateOtpWithHash(identifier);
@@ -118,6 +132,23 @@ public class ScrutinServiceImpl implements ScrutinService {
            log.error("User id {} not found", optBulletin.get().getCandidateId());
            throw new ElectionNotFoundException("le candidat avec le bulletin id " + optBulletin.get().getId() + " est introuvable");
        }
+    }
+
+    private void verifyAttemps(Scrutin scrutin) throws BadValidateException {
+        if(scrutin.getFailed_attemps() <= ApiConstants.MAX_SCRUTIN_FAILED_ATTEMPT){
+            int failedAttempts = scrutin.getFailed_attemps();
+            failedAttempts++;
+            scrutin.setFailed_attemps(failedAttempts);
+            scrutinRepository.save(scrutin);
+            int remainingAttempts = ApiConstants.MAX_SCRUTIN_FAILED_ATTEMPT - failedAttempts;
+            throw new BadValidateException("l'OTP est invalide ou expiré, il vous reste "+
+                    remainingAttempts+" tentatives");
+        }else{
+            //todo on revoke le vote de l'electeur
+            scrutin.setState(ScrutinState.REVOKED);
+            scrutinRepository.save(scrutin);
+            throw new BadValidateException("l'OTP est toujours invalid , votre vote a été rejeté pour motif de non validation ");
+        }
     }
 
 }

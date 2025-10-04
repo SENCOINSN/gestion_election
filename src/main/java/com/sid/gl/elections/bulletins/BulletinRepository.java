@@ -12,7 +12,8 @@ public interface BulletinRepository extends JpaRepository<Bulletin, Long> {
     @Query("select b from Bulletin b where b.electionId = ?1 order by b.id")
     List<Bulletin> findByElectionIdOrderByIdAsc(Long electionId);
 
-
+    @Query("select b from Bulletin b where b.electionId = ?1")
+    List<Bulletin> findByElectionId(Long electionId);
 
 
 }

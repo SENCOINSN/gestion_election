@@ -12,8 +12,12 @@ public interface ScrutinRepository extends JpaRepository<Scrutin, Long> {
     @Query("select s from Scrutin s where s.electeurId = ?1")
     Scrutin findByElecteurId(Long electeurId);
 
-    @Query("select s from Scrutin s where s.otp = ?1")
-    Scrutin findByOtp(String otp);
+
+    @Query("select s from Scrutin s where s.bulletinId = ?1")
+    Scrutin findByBulletinId(Long bulletinId);
+
+    @Query("select count(s) from Scrutin s where s.bulletinId = ?1 and s.state = ?2")
+    long countByBulletinIdAndStateAllIgnoreCase(Long bulletinId, ScrutinState state);
 
 
 }

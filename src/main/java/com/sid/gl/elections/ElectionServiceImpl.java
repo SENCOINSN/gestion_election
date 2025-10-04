@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -83,9 +84,11 @@ public class ElectionServiceImpl implements ElectionService {
                 electionRepository.getElectionIsActive();
         List<String> electionsParticipated = user.getElections_voted();
 
+        Predicate<ElectionInfoProjection> electionInfoProjectionPredicate =
+                election -> !electionsParticipated.contains(election.getName());
         return electionsActived
                 .stream()
-                .filter(electionInfoProjection -> !electionsParticipated.contains(username))
+                .filter(electionInfoProjectionPredicate)
                 .map(ElectionMapper::fromElectionProjection)
                 .toList();
 

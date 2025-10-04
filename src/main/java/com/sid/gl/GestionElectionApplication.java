@@ -112,7 +112,15 @@ public class GestionElectionApplication implements CommandLineRunner {
 		//todo soit envoyer au superviseur ou envoyer aux electeurs
 		// qui met fin au process de scrutin
 
+       // generation du pdf de resultat --> page html , mettre du javascript avec Window.print() (imprimer la page end pdf)
+		// jasperReport (logiciel)
+		// itext dependency (use this)
 
+
+		//format comptage des voix
+
+		// nom de l'élection
+		// int voices , String  name candidat , String email candidat
 
 
 		// avant java 8 (java < 8)

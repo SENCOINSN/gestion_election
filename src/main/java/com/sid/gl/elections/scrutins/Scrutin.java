@@ -16,6 +16,5 @@ public class Scrutin extends BaseEntity {
     private Long electeurId;
     @Enumerated(EnumType.STRING)
     private ScrutinState state;
-    private int failed_attemps=0;
-    private String otp;
+    private int failed_attemps=0; // nombre d'echecs MAX = 3
 }

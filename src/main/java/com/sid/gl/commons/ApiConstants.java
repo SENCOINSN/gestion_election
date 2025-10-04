@@ -11,5 +11,5 @@ public class ApiConstants {
     public static final String FORMAT_OTP_ALPHA_NUM="ALPHA_NUMERIC";
     public static final int MAX_FAILED_ATTEMPT = 5;
     public static final long LOCK_TIME_DURATION = 5 * 60 * 1000; // 5 minutes
-    public static final int MAX_SCRUTIN_ATTEMPT = 3;
+    public static final int MAX_SCRUTIN_FAILED_ATTEMPT = 3;
 }
