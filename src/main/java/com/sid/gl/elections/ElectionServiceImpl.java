@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class ElectionServiceImpl implements ElectionService {
     }
 
     //role admin
+    @Transactional(readOnly = true)
     @Override
     public DataResponse getAllElections(int page, int size) {
         Page <Election> pageElections = electionRepository.findAll(PageRequest.of(page, size));
