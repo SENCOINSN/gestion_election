@@ -56,7 +56,7 @@ public class ElectionEventListener {
         LocalDateTime endDate = election.getEndDate();
         LocalDateTime now = LocalDateTime.now();
 
-        if(endDate.isAfter(now)){ // expiré
+        if(endDate.isBefore(now)){ // expiré
             election.setActive(false);
             electionRepository.save(election);
             List<ScrutinPVResultats> pvResultats = new ArrayList<>();
