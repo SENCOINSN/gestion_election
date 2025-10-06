@@ -41,7 +41,7 @@ public class ElectionEventListener {
     }
 
     @EventListener
-    public void handleProductCreatedEvent(ElectionEvent event) throws IOException {
+    public void handleElectionEvent(ElectionEvent event) throws IOException {
         // todo process logic metier pour gerer l'election sur la duree, comptage voix generation pdf,
         //todo si ce n'est pas la fin de l'election , save le scrutin  et update le user sur les elections participées
         //todo si c'est la fin de l'election, (save le scrutin), update user et  fermer l'election
