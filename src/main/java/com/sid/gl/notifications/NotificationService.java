@@ -96,7 +96,7 @@ public class NotificationService implements NotificationFacade {
     }
 
 
-    private void sendSimpleEmail(String email,String subject,String body){
+    public void sendSimpleEmail(String email, String subject, String body){
         log.info("Send email to user ---{}",email);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(FROM);

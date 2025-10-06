@@ -115,6 +115,14 @@ public class BulletinServiceImpl implements BulletinService {
         return bulletins.stream().map(this::mapToBulletinResponseDto).collect(Collectors.toList());
     }
 
+
+    @Override
+    public List<BulletinResponseDto> getBulletinByElectionId(Long electionId) {
+        log.info("BulletinServiceImpl::getBulletinByElectionId {}", electionId);
+        List<Bulletin> bulletins = bulletinRepository.findByElectionIdOrderByIdAsc(electionId);
+        return bulletins.stream().map(this::mapToBulletinResponseDto).toList();
+    }
+
     private BulletinResponseDto mapToBulletinResponseDto(Bulletin bulletin) {
         Optional<User> optUser = userRepository.findById(bulletin.getCandidateId());
         Optional<Election> optElection = electionRepository.findById(bulletin.getElectionId());

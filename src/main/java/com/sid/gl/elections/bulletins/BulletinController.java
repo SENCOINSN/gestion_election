@@ -47,4 +47,10 @@ public class BulletinController extends AbstractController {
     public ResponseEntity<ApiResponse<BulletinResponseDto>> getBulletin(@PathVariable Long id) throws GestionElectionNotFoundException {
         return getResponseEntity(bulletinService.getBulletin(id));
     }
+
+
+    @GetMapping("/get/{electionId}")
+    public ResponseEntity<ApiResponse<List<BulletinResponseDto>>> getBulletinByElectionId(@PathVariable Long electionId) {
+        return getResponseEntity(bulletinService.getBulletinByElectionId(electionId));
+    }
 }

@@ -7,6 +7,7 @@ import com.sid.gl.commons.ApiResponse;
 import com.sid.gl.commons.DataResponse;
 import com.sid.gl.exceptions.ElectionAlreadyExistException;
 import com.sid.gl.exceptions.ElectionNotFoundException;
+import com.sid.gl.exceptions.UserNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -53,5 +54,15 @@ public class ElectionController extends AbstractController {
     @GetMapping("get/active")
     public ResponseEntity<ApiResponse<List<ElectionResponseDto>>> getAllElectionsByElectionId(){
         return getResponseEntity(electionService.getElectionIsActive());
+    }
+
+    //recuperation des elections active pour l'utilisateur
+
+    @Operation(summary = "Recuperation des elections active")
+    @GetMapping("get/active-by-user")
+    public ResponseEntity<ApiResponse<List<ElectionResponseDto>>> getActiveElectionsByUser() throws UserNotFoundException {
+        String currentUser = getCurrentUserConnected();
+        log.debug("ElectionController::getAllElectionsByElectionId {}", currentUser);
+        return getResponseEntity(electionService.getElectionActiveByUser(currentUser));
     }
 }

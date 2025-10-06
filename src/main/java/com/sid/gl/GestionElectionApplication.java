@@ -4,6 +4,8 @@ import com.sid.gl.users.Role;
 import com.sid.gl.users.RoleRepository;
 import com.sid.gl.users.User;
 import com.sid.gl.users.UserRepository;
+import io.github.seyeadamaUASZ.service.OTPConfiguration;
+import io.github.seyeadamaUASZ.service.OTPManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -34,6 +36,11 @@ public class GestionElectionApplication implements CommandLineRunner {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Bean
+	public OTPConfiguration getConf() {
+		return new OTPManager();
+	}
+
 	@Override
 	public void run(String... args) throws Exception {
 		List<String> names = List.of("ELECTOR","CANDIDAT","ADMIN","SUPERVISOR");
@@ -58,8 +65,6 @@ public class GestionElectionApplication implements CommandLineRunner {
 			user.setRoles(Set.of(roleRepository.findByRoleName("ADMIN").get()));
 			userRepository.save(user);
 		}
-
-
 
 		//---Gitflow-----------------------------------
 
@@ -92,7 +97,7 @@ public class GestionElectionApplication implements CommandLineRunner {
         //todo create annotation to validate extension file
 
 		// progress un cron qui va déclencher l'ouverture d'une election à la date venue à chaque 9h
-		//done  process envoi mail de notification aux électeurs de la plateforme
+		//done process envoi mail de notification aux électeurs de la plateforme
 
 		// aws S3, azure storage, google cloud storage,minio
 
@@ -107,7 +112,15 @@ public class GestionElectionApplication implements CommandLineRunner {
 		//todo soit envoyer au superviseur ou envoyer aux electeurs
 		// qui met fin au process de scrutin
 
+       // generation du pdf de resultat --> page html , mettre du javascript avec Window.print() (imprimer la page end pdf)
+		// jasperReport (logiciel)
+		// itext dependency (use this)
 
+
+		//format comptage des voix
+
+		// nom de l'élection
+		// int voices , String  name candidat , String email candidat
 
 
 		// avant java 8 (java < 8)

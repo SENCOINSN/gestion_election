@@ -11,5 +11,6 @@ public interface BulletinService {
     BulletinResponseDto createBulletinCandidat(BulletinRequestDto bulletinRequestDto) throws UserNotFoundException, ElectionNotFoundException, RoleNotFoundException;
     BulletinResponseDto getBulletin(Long id) throws GestionElectionNotFoundException;
     List<BulletinResponseDto> getAllBulletin() ;
+    List<BulletinResponseDto> getBulletinByElectionId(Long electionId);
 
 }
