@@ -71,11 +71,11 @@ public class UserController extends AbstractController {
     @Operation(summary = "recuperation la liste des electeurs")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/electeurs")
-    public ResponseEntity<ApiResponse<DataResponse>> getAllElecteurs(
+    public ResponseEntity<ApiResponse<DataResponse>> getAllElectors(
             @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
 
             @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size){
-        return  getResponseEntity(userService.getAllElecteurs(page,size));
+        return  getResponseEntity(userService.getAllElectors(page,size));
 
     }
 
@@ -91,10 +91,10 @@ public class UserController extends AbstractController {
     @Operation(summary = "recuperation la liste des superviseurs")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/superviseurs")
-    public ResponseEntity<ApiResponse<DataResponse>> getAllSuperviseurs(
+    public ResponseEntity<ApiResponse<DataResponse>> getAllSupervisors(
             @RequestParam(name = "page", defaultValue = ApiConstants.PAGE) int page,
             @RequestParam(name = "size", defaultValue = ApiConstants.SIZE)int size){
-        return getResponseEntity(userService.getAllSuperviseurs(page,size));
+        return getResponseEntity(userService.getAllSupervisors(page,size));
     }
 
 }

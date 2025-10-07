@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DataResponse getAllCandidates(int page, int size) {
+    public DataResponse getAllCandidats(int page, int size) {
         Page <User> candidates = userRepository.findByRoles_RoleName("CANDIDAT", PageRequest.of(page, size));
         return convertUserToDataResponse(candidates);
     }
