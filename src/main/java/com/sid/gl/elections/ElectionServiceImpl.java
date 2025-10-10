@@ -44,6 +44,21 @@ public class ElectionServiceImpl implements ElectionService {
 
     }
 
+    //role admin & supervisor
+    //Edit name or description of an election
+    @Override
+    public ElectionResponseDto editElection(Long id, ElectionRequestDto election) throws ElectionNotFoundException {
+        Optional< Election> electionOption = electionRepository.findById(id);
+        if(electionOption.isEmpty()){
+            throw new ElectionNotFoundException("Election with id " + id + " not found");
+        }
+        Election electionToEdit = electionOption.get();
+        electionToEdit.setName(election.name());
+        electionToEdit.setDescription(election.description());
+        return ElectionMapper.toElectionResponseDto(electionRepository.save(electionToEdit));
+
+    }
+
     //role admin
     @Override
     public ElectionResponseDto createElection(ElectionRequestDto request) throws ElectionAlreadyExistException {
