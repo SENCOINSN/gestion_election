@@ -16,4 +16,9 @@ public interface UserService {
     UserResponseDto addRole(Long id,RoleRequestDto role) throws UserNotFoundException;
     UserResponseDto deleteRoleUser(Long id, RoleRequestDto role) throws UserNotFoundException;
     UserResponseDto uploadImage(Long id, Optional<MultipartFile> image) throws UserNotFoundException, ResourceNotFoundException;
+    DataResponse getAllElectors(int page,int size);
+    DataResponse getAllSupervisors(int page,int size);
+    DataResponse getAllCandidates(int page,int size);
+
+
 }

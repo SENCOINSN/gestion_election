@@ -124,8 +124,6 @@ public class UserServiceImpl implements UserService{
         return UserMapper.toUserResponse(savedUser);
     }
 
-
-
     @Override
     public UserResponseDto uploadImage(Long id, Optional<MultipartFile> image) throws ResourceNotFoundException {
         return electionStorage.storeFile(id,image);
@@ -156,9 +154,26 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
     }
 
-    //todo liste des candidats (admin)
-    //todo liste des electeurs (admin)
-    //todo liste des superviseurs (admin)
     //todo sous format DataResponse
 
+    //todo liste des electeurs (admin)
+    @Override
+    public DataResponse getAllElectors(int page, int size) {
+        Page <User> pageUsers = userRepository.findAll(PageRequest.of(page, size));
+        return convertUserToDataResponse(pageUsers);
+    }
+
+    //todo liste des candidats (admin)
+    @Override
+    public DataResponse getAllCandidates(int page, int size) {
+        Page <User> pageUsers = userRepository.findAll(PageRequest.of(page, size));
+        return convertUserToDataResponse(pageUsers);
+    }
+
+    //todo liste des superviseurs (admin)
+    @Override
+    public DataResponse getAllSupervisors(int page, int size) {
+        Page <User> pageUsers = userRepository.findAll(PageRequest.of(page, size));
+        return convertUserToDataResponse(pageUsers);
+    }
 }

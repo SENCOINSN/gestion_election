@@ -71,6 +71,17 @@ public class UserController extends AbstractController {
         return getResponseEntity(userService.addRole(id,request));
     }
 
+    //supprimer de api-deleteRole
+    @Operation(summary = "Suppression d'un role a un utilisateur")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/deleteRole/{id}")
+    public ResponseEntity<ApiResponse<UserResponseDto>> deleteRoleUser(
+            @Parameter(name = "id",required = true)
+            @PathVariable Long id,
+            @RequestBody @Valid RoleRequestDto request) throws UserNotFoundException, RoleNotFoundException {
+        return getResponseEntity(userService.deleteRoleUser(id,request));
+    }
+
 
     @GetMapping(value="/filejpg/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
@@ -95,11 +106,37 @@ public class UserController extends AbstractController {
            return getResponseEntity(userService.uploadImage(id,file));
 
     }
-
-
     //todo liste des candidats (admin)
-    //todo liste des electeurs (admin)
-    //todo liste des superviseurs (admin)
 
+    @Operation(summary = "recuperation la liste des candidats")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/candidats")
+public ResponseEntity<ApiResponse<DataResponse>> getAllCandidates(
+        @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
+        @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size
+    ){
+    return getResponseEntity(userService.getAllCandidates(page,size));
+}
+    //todo liste des electeurs (admin)
+    @Operation(summary = "recuperation la liste des electeurs")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/electeurs")
+    public ResponseEntity<ApiResponse<DataResponse>> getAllElectors(
+            @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
+            @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size
+    ){
+        return getResponseEntity(userService.getAllElectors(page,size));
+    }
+
+    //todo liste des superviseurs (admin)
+    @Operation(summary = "recuperation la liste des superviseurs")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/superviseurs")
+    public ResponseEntity<ApiResponse<DataResponse>> getAllSupervisors(
+            @RequestParam(name = "page",defaultValue = ApiConstants.PAGE)int page,
+            @RequestParam(name = "size",defaultValue = ApiConstants.SIZE)int size
+    ){
+        return getResponseEntity(userService.getAllSupervisors(page,size));
+    }
 
 }
